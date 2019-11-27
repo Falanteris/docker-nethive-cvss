@@ -28,6 +28,6 @@ RUN npm install -g forever
 
 RUN chmod +x start-service
 
-ENTRYPOINT ["exec","start-service"]
+ENTRYPOINT ["bash","start-service"]
 
 
