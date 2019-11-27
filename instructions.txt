@@ -18,10 +18,17 @@ nvd-df.py  --> A tool specifically designed for extracting key statistical data 
 	   --> Input: None
 	   --> Ouput: a JSON file with the name from the vulnerability type that was given in "cleaned.json".
 	       It contains numeric data for each CVSS3 vector interpolation.
+	       
+	       
+downloader.js --> A script to download .gz data_feeds from NVD, it is configured by the configs/conf.json file.
+	      --> The download would be run synchronously.
+	      --> The download would start once updater.js is down.
 
 kafka-communicator.py --> A listener to kafka producer.
-		      --> Can be configured through conf.json in kafka-config folder.
-		      --> A daemonized service.
+		      --> It is configured by setting two env variables, PRODUCER and BOOSTRAP_SERVER
+		      --> PRODUCER is the kafka producer name
+		      --> BOOSTRAP_SERVER is the host:port string that indicates the location of kafka serve
+		      --> A daemonized service, but you can opt to not daemonize it (see start-service bash script).
 
 ws.js --> A Websocket that communicates new data entry to the front-end system.
       --> A daemonized service.
