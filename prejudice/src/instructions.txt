@@ -1,0 +1,10 @@
+to enable prejudice, you'll have to set the MYSQL env variable to a
+"dsn". Basically it's the connection string.
+
+something like this
+
+<username>:<password>@<host (if unspecified, defaults to localhost) >/<database>
+
+right now, the connection string that works is
+
+test_user:test@/test

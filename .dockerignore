@@ -1,0 +1,7 @@
+node_modules
+*.meta
+Dockerfile
+.git
+data_feeds
+gzdata
+

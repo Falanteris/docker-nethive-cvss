@@ -1,0 +1,27 @@
+{
+	"/send-request":{
+		"superuser":false,
+		"authentication":true
+	},
+	"/admin":{
+		"superuser":true,
+		"authentication":true
+	},
+	"/secret":{
+
+		"superuser":false,
+		"authentication":true
+	},
+	"/user/transaction":{
+		"superuser":true,
+		"authentication":true
+	},
+
+	"/user/page":{
+		"superuser":false,
+		"authentication":true
+	}
+
+
+}
+

@@ -1,0 +1,65 @@
+merger.js --> An implementation of the piper2.0 API
+	  --> Input: space separated arguments in a format of ["vultype","ip","url"]
+	  --> Output: a summary in form of a JSON which includes SEVERITY, SCORE, and VECTOR STRING
+
+updater.js --> A tool to perform live monitoring on NVD datasets via their metadata
+	   --> Input: none
+	   --> Output: none
+	   --> Event handler type
+	   --> Configured using the file conf.json in the configs/ folder.
+	   --> A daemonized service
+
+learn.js   --> A tool to extract raw NVD JSON data feeds
+	   --> Input: space separated arguments in a format of ["dataset-folder","cwe","vuln. tag"]
+	   --> Output: a JSON file called 'cleaned.json'
+	   --> This will be the input to the nvd-df.py script
+
+nvd-df.py  --> A tool specifically designed for extracting key statistical data from cleaned.json
+	   --> Input: None
+	   --> Ouput: a JSON file with the name from the vulnerability type that was given in "cleaned.json".
+	       It contains numeric data for each CVSS3 vector interpolation.
+
+kafka-communicator.py --> A listener to kafka producer.
+		      --> Can be configured through conf.json in kafka-config folder.
+		      --> A daemonized service.
+
+ws.js --> A Websocket that communicates new data entry to the front-end system.
+      --> A daemonized service.
+
+ws-content.json --> A JSON that contains a single array that holds messages.
+
+The system would communicate the result of updater.js through a socket file. Which the frontend server can listen to.
+
+
+==== HOW TO RUN ====
+--PREREQUISITES
+	npm
+	pip3
+
+--Initialization
+1. git clone the project..
+2. run npm install
+3. run pip3 install -r requirements.txt
+4. run npm install -g forever (if you haven't yet)
+4. forever start ws.js (this runs on port 8000)
+5. forever start updater.js
+
+-- Testing with kafka server
+
+* i recommend the docker-compose project by wurstmeister at https://github.com/wurstmeister/kafka-docker
+
+1. if you're using the said docker-compose project, follow the instructions available on the page.
+2. if you're using a local kafka instance, create a producer according to your kafka-config/conf.json specs
+
+3. finally, run "python3 kafka-communicator.py" to listen to the specified producer.
+
+-- Viewing the result in front-end
+
+1. open console, and create a websocket instance, with 'echo-protocol' protocol
+	i.e `let ws = new WebSocket("ws://localhost:8000","echo-protocol")`
+	
+2. listen to new message from websocket by binding a function
+	i.e ws.onmessage = (ev)=>{console.log(ev.data) /*do whatever*/ }
+
+Now you can see new messages popping up from either kafka or the updater.
+

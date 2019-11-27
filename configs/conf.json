@@ -1,0 +1,6 @@
+{
+	"savefile":["nvdcve-1.1-2019.json","nvdcve-1.1-2018.json","nvdcve-1.1-2017.json"],
+	"target":["https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2019","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2018","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2017"],
+	"metafile":["nvdcve-1.1-2019.meta","nvdcve-1.1-2018.meta","nvdcve-1.1-2017.meta"],
+	"dataset_folder":"data_feeds"
+}

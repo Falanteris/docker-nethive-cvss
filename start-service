@@ -1,0 +1,4 @@
+forever start ws.js 
+forever start downloader.js 
+forever start updater.js  
+python3 kafka-communicator.py

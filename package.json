@@ -1,0 +1,25 @@
+{
+  "name": "nvd-json-ext",
+  "version": "1.0.0",
+  "description": "",
+  "main": "read_impact.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@rk-sragen.site:/home/git/research/nveedelysis/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "falanteris": "^1.4.15",
+    "fs-extra": "^8.1.0",
+    "gunzip-file": "^0.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "node-gzip": "^1.1.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "websocket": "^1.0.30"
+  }
+}

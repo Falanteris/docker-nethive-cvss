@@ -1,0 +1,4 @@
+{
+	"kafka":"localhost:9092",
+	"producer":"CONSUMER"
+}
