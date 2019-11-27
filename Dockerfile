@@ -28,6 +28,8 @@ RUN npm install -g forever
 
 RUN chmod +x start-service
 
+RUN mkdir "gzdata" "data_feeds"
+
 ENTRYPOINT ["bash","start-service"]
 
 
