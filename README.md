@@ -15,8 +15,28 @@ This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combin
 
 *3. You're server environment is connected to interface with an IP/CIDR combinaton of 172.17.0.2/24*
 
+*4. You have a MYSQL server running in your local machine
 
 If you have a different producer, server location, or IP/CIDR combination, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking
+
+# MYSQL Server Integration
+
+
+You would need to configure a mysql server, a table called `paths` must be inserted in your specified database.
+
+In order for the driver to connect, you'll have to specify an `env` variable called `MYSQL` that is filled with a `dsn` for said SQL. The format is `[username[:password]@][protocol[(address)]]/dbname[?param1=value1&...&paramN=valueN]`
+
+For example: `test_user:test@/test`
+
+Where 
+
+        - test_user is the user is the user of the database
+        - test (before the @) is the password
+        - you can simply just write @ to specify that the database is located in localhost
+        - and the final *test* is the database name.
+ 
+Now if you were to add this to the docker container, you can use the `-e` argument again to specify the `MYSQL` environment
+variable with the `dsn`
 
 # Data Input Format
 
