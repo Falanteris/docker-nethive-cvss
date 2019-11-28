@@ -13,7 +13,7 @@ This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combin
 
 *2. You have a producer called 'CONSUMER' running in that server*
 
-*3. You're server environment is connected to interface with an IP/CIDR combinaton of 172.17.0.2/24
+*3. You're server environment is connected to interface with an IP/CIDR combinaton of 172.17.0.2/24*
 
 
 If you have a different producer, server location, or IP/CIDR combination, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking
