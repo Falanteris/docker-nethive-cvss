@@ -57,4 +57,4 @@ As of now, there're 3 types of events.
 
 # Wait, what is this?
 
-Good question. This is basically an application based on our research of the NVD Dataset. Long story short, our research concludes that in a span of 3 years since 2017, classified vulnerabilities no matter the environment has a good chance of having the sam e CVSSv3 Vector string, in exception of PR (Privilege Required) Vector.
+Good question. This is basically an application based on our research of the NVD Dataset. Long story short, our research concludes that in a span of 3 years since 2017, classified vulnerabilities no matter the environment has a good chance of having the sam e CVSSv3 Vector string, in exception of PR (Privilege Required) Vector. (https://www.overleaf.com/read/fyzfxgfjrfs)
