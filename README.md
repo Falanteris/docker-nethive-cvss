@@ -34,9 +34,11 @@ The system can then work on these data, as well as other data you may want to in
 
 This is the `vul` property from the JSON input. Here are the following currently acceptable types:
 
-*1. SQL Injection: You can put `SQLi` to indicate this in the data input
-*2. XSS: You can put `XSS` to indicate this in the data input
-*3. DDOS: Experimental, but you can also put `DDOS` in the data input
+*1. SQL Injection: You can put `SQLi` to indicate this in the data input*
+
+*2. XSS: You can put `XSS` to indicate this in the data input*
+
+*3. DDOS: Experimental, but you can also put `DDOS` in the data input*
 
 # Relay Methods
 
