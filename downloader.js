@@ -5,6 +5,7 @@ let template = require("./event-template")
 let isAccessible = require('fs').accessSync;
 let unlink = require('fs').unlinkSync
 let sock = "/tmp/updater.sock"
+let wssock = "/tmp/piper.sock"
 function setEventTemplate(data,opts={}){
 	template["EVENT_TYPE"]= opts.EVENT_TYPE || "UPDATE";
 	template["EVENT_DATA"] = data;
@@ -12,6 +13,7 @@ function setEventTemplate(data,opts={}){
 	template["@timestamp"] = date_time.toString();
 	return template;
 }
+let client = net.createConnection(wssock);
 let addresses = []
 let savefile = []
 let metafile = []
@@ -33,7 +35,7 @@ async function ungzipper(data,saveTo,meta){
 		let date_time = new Date();
 		meta["EVENT_DATA"] = `${saveTo}`
 	    meta["@timestamp"] = date_time.toString()
-		// client.write(JSON.stringify(meta));
+	    client.write(JSON.stringify(meta));
 	})
 }
 function wget_runner(meta,addr){
@@ -42,7 +44,7 @@ function wget_runner(meta,addr){
 		meta["EVENT_TYPE"]  = "EVENT_UPDATE_DONE"
 		let date_time = new Date();
 	    	meta["@timestamp"] = date_time.toString()
-		// client.write(JSON.stringify(meta));	
+		client.write(JSON.stringify(meta));	
 		
 		return instance;	
 }
