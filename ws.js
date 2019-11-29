@@ -55,7 +55,7 @@ let socket = handler((data)=>{
 		wsEmitter.emit("change",data);
 	}
 
-},sock,2);
+},sock,3);
 
 	/*
 	fs.watchFile("ws-content.json",(curr)=>{
