@@ -74,7 +74,7 @@ Once you're able to establish a connection with the WebSocket, the data that wou
 As of now, there're 3 types of events.
 
        1. UPDATE: this event indicates that an nvd-dataset has a new updated version
-       2. EVENT_UPDATE_DONE: this event indicates that an nvd-dataset has done updating.
+       2. EVENT_EXTRACT_DONE: this event indicates that an nvd-dataset has done updating.
        3. SUM: this event indicates that a summarizing process has been finished.
 
 # Wait, what is this?
