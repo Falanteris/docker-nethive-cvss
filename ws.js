@@ -105,7 +105,7 @@ wsServer = new WebSocketServer({
 function originIsAllowed(request) {
   // put logic here to detect whether the specified origin is allowed.
   // check for JWT.
-    
+  /*    
   if(!request.cookies){
   	console.log("No cookie detected")
   	return false;
@@ -118,19 +118,21 @@ function originIsAllowed(request) {
   		console.log("webtoken detect")
   		token = request.cookies[i].value;
   		break;
-  	}	
+  	}
   }
    if(!token){
    	console.log("No webtoken key detected..")
   	return false;
 
   }
-
+  */
 
   try{
+    let protocol = request.requestedProtocols[0]
+    let token = request.protocolFullCaseMap[protocol]
     let decode = jwt.verify(token,"M0r3Sens1t1veTh4nY0urG1rlfr13nd")
 
-    return decode;
+    return protocol;
   }catch(err){
  
   	return false;
@@ -141,7 +143,8 @@ function originIsAllowed(request) {
 // let token = jwt.sign("doin ur mum","M0r3Sens1t1veTh4nY0urG1rlfr13nd"); 
 // console.log(token)
 wsServer.on('request', function(request) {
-    if (originIsAllowed(request)===false) {
+    let chkReq = originIsAllowed(request);
+    if (chkReq===false) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
       console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
@@ -150,7 +153,7 @@ wsServer.on('request', function(request) {
     
     try{
 
-    var connection = request.accept('echo-protocol', request.origin);
+    var connection = request.accept(chkReq, request.origin);
     
     console.log((new Date()) + ' Connection accepted.');
     
