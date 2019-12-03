@@ -1,1 +1,1 @@
-docker run -itd --network=host --name cvss -e PRODUCER=CONSUMER -e BOOTSTRAP_SERVER=localhost:9092 -e INTERFACE=172.17.0.2/24  --rm nethive-cvss
+docker run -it --network=host --name cvss -e PRODUCER=NETHIVE -e BOOTSTRAP_SERVER=10.20.150.213:9092 -e INTERFACE=10.20.150.213/24  --rm nethive-cvss
