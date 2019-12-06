@@ -25,7 +25,7 @@ def call_summarizer(msg):
 	return result.stdout;
 def process_message(msg):
 	msg = dict(msg)
-	msg["@timestamp"] = str(datetime.datetime.now())
+	msg["processed_at"] = str(datetime.datetime.now())
 	arg = {}
 	# check properties, if it contains vul, ip, and url, perform calculation.
 	if "vul" in msg and "ip" in msg and "url" in msg:

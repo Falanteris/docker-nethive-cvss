@@ -1,1 +1,1 @@
-docker run -it --network=host --name cvss -e PRODUCER=NETHIVE -e BOOTSTRAP_SERVER=10.20.150.213:9092 -e INTERFACE=10.20.150.213/24  --rm nethive-cvss
+docker run -it --network=host --name cvss -e PRODUCER=FOOBAR -e BOOTSTRAP_SERVER=192.168.43.135:9092 -e INTERFACE=10.20.148.158/24  --rm nethive-cvss

@@ -24,7 +24,7 @@ If we need to use wss:// protocol
 function validate_content(data){
 	if(!data.hasOwnProperty("EVENT_TYPE")) return false;
 	if(!data.hasOwnProperty("EVENT_DATA")) return false;
-	if(!data.hasOwnProperty("@timestamp")) return false;
+//	if(!data.hasOwnProperty("@timestamp")) return false;
 	return true;
 }
 
