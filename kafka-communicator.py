@@ -25,11 +25,10 @@ def call_summarizer(msg):
 	return result.stdout;
 def process_message(msg):
 	msg = dict(msg)
-	msg["@timestamp"] = str(datetime.datetime.now())
+	msg["processed_at"] = str(datetime.datetime.now())
 	arg = {}
 	# check properties, if it contains vul, ip, and url, perform calculation.
 	if "vul" in msg and "ip" in msg and "url" in msg:
-		print("test")
 		arg["vul"] = msg["vul"]
 		arg["ip"] = msg["ip"]
 		arg["url"] = msg["url"]
@@ -42,8 +41,6 @@ def log(msg):
 		msg = json.loads(msg)
 		msg = process_message(msg)
 	#s = socket.connect("/tmp/piper.sock");
-		print(msg)
-		
 		sock.send(msg.encode('utf8'));
 		print("message sent")
 	except Exception as e:
