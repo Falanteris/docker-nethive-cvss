@@ -1,4 +1,5 @@
 let fs = require('fs')
+let {spawn} = require('child_process');
 let startDate = new Date()
 let status = {
 	pid: process.pid,
@@ -22,15 +23,24 @@ fs.watchFile("/var/cvss.json",(old,curr)=>{
 			if(!state.active && !state.hasOwnProperty("termination")){
 				let termination = new Date();
 				state.termination = termination.toString();
+				spawn("forever",["stop","updater.js"])
 				fs.writeFile("/var/cvss.json",JSON.stringify(state),()=>{
 					console.log("Done writing changes")
 				})
+				
 				console.log(state)
 				return;
 			}
 			if(state.active && state.hasOwnProperty("termination")){
 				state.lastTermination = state.termination
 				delete state.termination;
+				sp = spawn("forever",["start","updater.js"])
+				sp.stderr.on("data",(d)=>{
+					console.log(d.toString())
+				})
+				sp.stdout.on('data',(d)=>{
+					console.log(d.toString())
+				})
 				fs.writeFile("/var/cvss.json",JSON.stringify(state),()=>{
                                         console.log("Done writing changes")
                                 })
