@@ -1,4 +1,20 @@
+# UPDATES
+
+We now would rely on Docker Volumes to share data with other containers. in order to create a volume, you can do so by the following command.
+
+        $ docker volume create <volume_name>
+        
+Once that is done, attach the volume into our container's `/var` directory by doing the following
+
+        $ docker run -v <volume_name>:/var --name cvss -e PRODUCER=CONSUMER -e BOOTSTRAP_SERVER=192.168.100.5:9092 -e INTERFACE=192.168.100.5/24 -e ESLOC=http://localhost:9092 -e STOREINDEX=cvss nethive-cvss
+        
+The example given in the `cvss` bash script assumes you have a volume called `gearwork-volume`.
+
+As you can also see, we have provided a way for you to inject more env variables. They are `ESLOC` and `STOREINDEX`.
+`ESLOC` is the location Elasticsearch server, (*refer to https://elasticsearch-py.readthedocs.io/en/master/ section SSL and Authentication for an example*). The `STOREINDEX` env is pretty straightforward. It's the name of the index you want to store the CVSS data in.
+
 # NVDEELYSIS 
+
 This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combines Node.js Events and Asynchronous File Reading with Python Data Science tools such as Pandas and Matplotlib for Data Visualization.
 
 # Instructions
@@ -7,6 +23,7 @@ This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combin
     $ docker build -t nethive-cvss .
     $ chmod +x cvss
     $ ./cvss
+    
 **Side Note** : This assumes a few things
 
 *1. You have a kafka server running in localhost port 9092*
@@ -17,7 +34,13 @@ This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combin
 
 *4. You have a MYSQL server running in your local machine
 
-If you have a different producer, server location, or IP/CIDR combination, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking
+*5. You have an Elasticsearch running in localhost interface, port 9200*
+
+*6. The elasticsearch index you wish to store the CVSS data in*
+
+*7. you have a Docker Volume called gearwork-volume*
+
+If any of these differ from what you prefer, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking
 
 # MYSQL Server Integration
 
@@ -76,6 +99,8 @@ As of now, there're 3 types of events.
        1. UPDATE: this event indicates that an nvd-dataset has a new updated version
        2. EVENT_EXTRACT_DONE: this event indicates that an nvd-dataset has done updating.
        3. SUM: this event indicates that a summarizing process has been finished.
+
+
 
 # Wait, what is this?
 
