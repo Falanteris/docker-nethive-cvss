@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 from kafka import KafkaConsumer
+from elasticsearch import Elasticsearch
 import json
-import socket
+
+#import socket
 import datetime
 import subprocess
 import os
@@ -10,11 +12,17 @@ import os
 #op  = open("kc.log","r+")
 #op.close()
 #sock.connect("/tmp/piper.sock");
-
+try:
+	es = Elasticsearch(
+                [os.getenv("ESLOC")]
+        )
+except Exception as e:
+	es = None;
+	print("Cannot contact ES at that server, make sure you specify ESLOC env right..")
+	pass
 
 def call_summarizer(msg):
 	result = subprocess.check_output(["node","merger.js",msg["vul"],msg["ip"],msg["url"]]).decode();
-	
 	try:
 		print(result)
 		return json.loads(result);
@@ -36,13 +44,18 @@ def process_message(msg):
 	return json.dumps(msg)
 
 def log(msg):
-	global sock
+	#global sock
+	global es
 	try:
 		msg = json.loads(msg)
 		msg = process_message(msg)
+		if es:
+			es.index(index=os.getenv("STOREINDEX"),body=msg);
+			return;
+		print("Cannot send this to ES: {}".format(msg))
 	#s = socket.connect("/tmp/piper.sock");
-		sock.send(msg.encode('utf8'));
-		print("message sent")
+		#sock.send(msg.encode('utf8'));
+		#print("message sent")
 	except Exception as e:
 		print(e)
 		print("error in processing message");
@@ -52,13 +65,12 @@ def log(msg):
 	#op.write('INFO:{}\n'.format(msg))
 #	op.close()
 if __name__ == "__main__":
-	sock = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);
-	sock.connect("/tmp/piper.sock");
-	print("Added Socket")
+	#sock = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);
+	#sock.connect("/tmp/piper.sock");
+	#print("Added Socket")
 
 #config = json.loads(open("kafka-config/conf.json").read())
 #template = json.loads(open("event-template.json").read());
-
 	producer = os.getenv("PRODUCER")
 	server_port = os.getenv("BOOTSTRAP_SERVER")
 	if not producer or not server_port:
