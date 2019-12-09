@@ -1,4 +1,5 @@
 forever start ws.js 
 forever start downloader.js 
 forever start updater.js  
+forever start registerEventListener.js
 python3 kafka-communicator.py
