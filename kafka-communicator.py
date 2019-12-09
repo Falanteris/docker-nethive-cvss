@@ -50,7 +50,11 @@ def log(msg):
 		msg = json.loads(msg)
 		msg = process_message(msg)
 		if es:
-			es.index(index=os.getenv("STOREINDEX"),body=msg);
+			try:
+				es.index(index=os.getenv("STOREINDEX"),body=msg);
+			except Exception as e:
+				print("An error occured while sending to index");
+				print(e)
 			return;
 		print("Cannot send this to ES: {}".format(msg))
 	#s = socket.connect("/tmp/piper.sock");
