@@ -10,6 +10,14 @@ Once that is done, attach the volume into our container's `/var` directory by do
         
 The example given in the `cvss` bash script assumes you have a volume called `gearwork-volume`.
 
+You can then view the status of the service, and modify it through another docker container connected to the same volume by accessing a file called `cvss.json`. You can then modify the active status to `true` or `false`.
+
+        {
+               ...
+               active: <true|false> (default: true)
+               ...
+        }
+
 As you can also see, we have provided a way for you to inject more env variables. They are `ESLOC` and `STOREINDEX`.
 `ESLOC` is the location Elasticsearch server, (*refer to https://elasticsearch-py.readthedocs.io/en/master/ section SSL and Authentication for an example*). The `STOREINDEX` env is pretty straightforward. It's the name of the index you want to store the CVSS data in.
 
