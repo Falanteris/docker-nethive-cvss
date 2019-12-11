@@ -29,6 +29,8 @@ RUN npm install -g forever
 
 RUN chmod +x start-service
 
+RUN chmod +x auto_merge
+
 RUN mkdir "gzdata" "data_feeds"
 
 ENTRYPOINT ["bash","start-service"]

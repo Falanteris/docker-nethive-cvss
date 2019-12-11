@@ -1,0 +1,4 @@
+node reader.js data_feeds CWE-79 XSS
+python3 nvd-df.py
+node reader.js data_feeds CWE-89 SQLi
+python3 nvd-df.py
