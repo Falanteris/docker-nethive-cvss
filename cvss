@@ -1,1 +1,1 @@
-docker run -it --network=host -v gearwork-volume:/var --name cvss -e PRODUCER=PRODUCER -e BOOTSTRAP_SERVER=10.20.148.158:9092 -e INTERFACE=192.168.100.5/24 -e ESLOC=http://localhost:9092 -e STOREINDEX=cvss  --rm nethive-cvss
+docker run -it --network=host -v gearwork-volume:/var --name cvss -e PRODUCER=PRODUCER -e BOOTSTRAP_SERVER=10.20.150.114:9092 -e INTERFACE=10.20.150.114/24 -e ESLOC=http://localhost:9092 -e STOREINDEX=nethive-cvss  --rm nethive-cvss
