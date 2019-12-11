@@ -27,7 +27,6 @@ fs.watchFile("/var/cvss.json",(old,curr)=>{
 				fs.writeFile("/var/cvss.json",JSON.stringify(state),()=>{
 					console.log("Done writing changes")
 				})
-				
 				console.log(state)
 				return;
 			}

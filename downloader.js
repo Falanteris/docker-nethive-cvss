@@ -6,6 +6,10 @@ let isAccessible = require('fs').accessSync;
 let unlink = require('fs').unlinkSync
 let sock = "/tmp/updater.sock"
 let wssock = "/tmp/piper.sock"
+let ungzipped = 0;
+let Event = require("events")
+class Emitter extends Event{}
+let merge_emitter = new Emitter();
 function setEventTemplate(data,opts={}){
 	template["EVENT_TYPE"]= opts.EVENT_TYPE || "UPDATE";
 	template["EVENT_DATA"] = data;
@@ -14,6 +18,7 @@ function setEventTemplate(data,opts={}){
 	return template;
 }
 let client = net.createConnection(wssock);
+let copyClient = client;
 let addresses = []
 let savefile = []
 let metafile = []
@@ -36,6 +41,10 @@ async function ungzipper(data,saveTo,meta){
 		meta["EVENT_DATA"] = `${saveTo}`
 	    meta["@timestamp"] = date_time.toString()
 	    client.write(JSON.stringify(meta));
+	    ungzipped += 1
+	    if(ungzipped == addr_meta_list.length){
+			merge_emitter.emit("ready");
+	    }
 	})
 }
 function wget_runner(meta,addr){
@@ -125,8 +134,14 @@ let conn = net.createServer((client)=>{
 						let pair = addr_meta_list[i]
 						download_runner(pair.meta,pair.addr);
 					}
-					addr_meta_list = [];
 					
+					merge_emitter.on("ready",()=>{
+						let merge_proc = spawnSync("./auto_merge");
+						let mergeMeta = setEventTemplate("Data has been successfully merged",{"EVENT_TYPE":"EVENT_MERGE_DONE"})
+						copyClient.write(JSON.stringify(mergeMeta));
+						addr_meta_list = [];
+						ungzipped = 0;
+					});
 		})
 	})
 })
