@@ -108,7 +108,23 @@ As of now, there're 3 types of events.
        2. EVENT_EXTRACT_DONE: this event indicates that an nvd-dataset has done updating.
        3. SUM: this event indicates that a summarizing process has been finished.
 
+# Path APIs
 
+These path APIs are located in the `path_apis` folder. Which contains the `insertpath` and `updatepath` binary file. You'll have to include the MYSQL env variable with a `dsn` string similar to the example above for this to work.
+
+Each of these requires you to supply command-line arguments.
+
+*insertpath*
+
+This API is tasked with inserting a specific path information based on the user preferences. The syntax is the following.
+
+               ./insertpath <path:string> <is_superuser:bool> <needs_authentication:bool>
+               
+*updatepath*
+
+This API is tasked with updating a specific path information based on the user's preferences. The syntax is the following.
+
+                ./updatepath <id:int> <path:string> <superuser:bool> <authentication:bool>
 
 # Wait, what is this?
 
