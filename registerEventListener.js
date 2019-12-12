@@ -1,12 +1,30 @@
 let fs = require('fs')
 let {spawn} = require('child_process');
 let startDate = new Date()
+
 let status = {
 	pid: process.pid,
 	active:true,
 	start:startDate.toString()
 }
-fs.writeFile("/var/cvss.json",JSON.stringify(status),(err)=>{
+function validateConfig(content){
+	let missing = [];
+	let toCheck = ["startcommands","stopcommands","listenerfile"]
+	for(i in toCheck){
+	 	if(!content.hasOwnProperty(toCheck[i])){
+		 	missing.push(toCheck[i])
+		}
+	}
+	return missing;
+}
+let config = JSON.parse(fs.readFileSync("event-config.json").toString())
+let missingConf = validateConfig(config)
+if(missingConf.length > 0){
+	throw `Config not properly set... Missing ${missingConf.join(",")}`
+}
+
+function registerListener(listener){
+fs.writeFile(listener,JSON.stringify(status),(err)=>{
 	if(err){
 		console.log(err)
 		console.log("error while writing")
@@ -14,6 +32,7 @@ fs.writeFile("/var/cvss.json",JSON.stringify(status),(err)=>{
 	}
 	console.log("Instantiate Process Finished")
 });
+}
 function add_watcher(to_watch,kill_command,start_command){
 fs.watchFile(to_watch,(old,curr)=>{
 
@@ -25,6 +44,7 @@ fs.watchFile(to_watch,(old,curr)=>{
 				let termination = new Date();
 				state.termination = termination.toString();
 				kill_command.forEach((command)=>{
+					console.log(command)
 					spawn(command[0],command[1])
 				})
 				fs.writeFile(to_watch,JSON.stringify(state),()=>{
@@ -61,7 +81,9 @@ fs.watchFile(to_watch,(old,curr)=>{
 	})
 })
 }
-add_watcher("/var/cvss.json",[["forever",["stop","updater.js"]]],[["forever",["start","updater.js"]]])
+
+registerListener(config.listenerfile);
+add_watcher(config.listenerfile,config.stopcommands,config.startcommands)
 
 //setInterval(()=>{
 //	console.log("Running Diagnostic")

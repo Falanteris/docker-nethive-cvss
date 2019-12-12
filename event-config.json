@@ -1,0 +1,6 @@
+{
+	"listenerfile":"/var/nethive/cvss.json",
+	"stopcommands":[ ["forever",["stop","updater.js"]] ],
+	"startcommands":[ ["forever",["start","updater.js"]] ]
+	
+}
