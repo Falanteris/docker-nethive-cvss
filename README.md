@@ -29,6 +29,8 @@ Regarding the output, it will be a `.json` file you specified in the `listenerfi
 
 Yes, as you may guess, you only need to manipulate the `active` property between `true` or `false`. Quite simple, huh?. After the `stopcommands` have been executed, there will be a new property called `termination` which indicates the time when the machine is *stopped*. When restarted, the json config file will change the `termination` property into `lastTermination`, with the same value.
 
+*SIDE NOTE* : You would need to use `sudo` as you run `registerEventListener.js` if you wish to place the listener file in a folder which require root privileges such as `var`.
+
 # UPDATES
 
 
