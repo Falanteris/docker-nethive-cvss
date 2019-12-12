@@ -56,6 +56,8 @@ fs.watchFile(to_watch,(old,curr)=>{
 			}
 			if(state.active && state.hasOwnProperty("termination")){
 				state.lastTermination = state.termination
+				let newStart = new Date();
+				state.start = newStart.toString();
 				delete state.termination;
 				//sp = spawn("forever",["start","updater.js"])
 				start_command.forEach((command)=>{
