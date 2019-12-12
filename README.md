@@ -1,4 +1,36 @@
+
+# Registering Event Listeners
+
+As you would see, there's a new script called  `registerEventListener.js` and `event-config.json`. You can use these as event listener in your system. Simply install `Node v10.0+` (no npm needed) and modify the event-config.json as you please.
+
+The `event-config.json` has a rule of thumb you have to follow in order to get the event listener to work properly. The following is the explanation of the properties within `event-config.json`.
+
+               {
+                listenerfile: <this is the .json file that others with authority can use to stop/start your processess,
+                stopcommands : <an array, filled with a 2-length array (tuple), that contains the command (string), and the arguments <tuple> to stop all the necessary services.
+                startcommands : <the format is similar to stopcommands, but this one is for restarting the applications.>
+               }
+            
+*Further Explanation*
+
+`listenerfile` - is the file that acts as a pointer to your processes. Others with authority can manipulate it with consideration.
+
+`stopcommands` - is the *stop commands* when you need to shut down some services when invoked by the person manipulating the json output file.
+
+`startcommands` - is the *start commands* when you need to reboot some services when invoked by the person manipulating the json output file.
+
+Regarding the output, it will be a `.json` file you specified in the `listenerfile` property of the config file. The format is the following:
+
+        {
+                pid:<the process of the listener running>
+                active:<true|false>
+                start: <the start time of the listener>
+        }
+
+Yes, as you may guess, you only need to manipulate the `active` property between `true` or `false`. Quite simple, huh?. After the `stopcommands` have been executed, there will be a new property called `termination` which indicates the time when the machine is *stopped*. When restarted, the json config file will change the `termination` property into `lastTermination`, with the same value.
+
 # UPDATES
+
 
 We now would rely on Docker Volumes to share data with other containers. in order to create a volume, you can do so by the following command.
 
