@@ -22,9 +22,9 @@ The `event-config.json` has a rule of thumb you have to follow in order to get t
 Regarding the output, it will be a `.json` file you specified in the `listenerfile` property of the config file. The format is the following:
 
         {
-                pid:<the process of the listener running>
+                pid:<the process id of the listener>
                 active:<true|false>
-                start: <the start time of the listener>
+                start: <the start time of the systems>
         }
 
 Yes, as you may guess, you only need to manipulate the `active` property between `true` or `false`. Quite simple, huh?. After the `stopcommands` have been executed, there will be a new property called `termination` which indicates the time when the machine is *stopped*. When restarted, the json config file will change the `termination` property into `lastTermination`, with the same value.
