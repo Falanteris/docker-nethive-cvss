@@ -40,8 +40,10 @@ def process_message(msg):
 		arg["vul"] = msg["vul"]
 		arg["ip"] = msg["ip"]
 		arg["url"] = msg["url"]
-		msg["SUMMARIZE_RESULT"] = call_summarizer(arg)
-	return json.dumps(msg)
+		new_instance = {}
+		new_instance["corr_id"] = msg["_id"]
+		new_instance["SUMMARIZE_RESULT"] = call_summarizer(arg)
+	return json.dumps(new_instance)
 
 def log(msg):
 	#global sock

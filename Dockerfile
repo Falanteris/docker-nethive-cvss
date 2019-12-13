@@ -33,6 +33,8 @@ RUN chmod +x auto_merge
 
 RUN mkdir "gzdata" "data_feeds"
 
+RUN mkdir "/var/nethive"
+
 ENTRYPOINT ["bash","start-service"]
 
 
