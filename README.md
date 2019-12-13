@@ -82,7 +82,7 @@ This tool is designed to evaluate CVSS3 Information NVD JSON Datasets. It combin
 
 *7. you have a Docker Volume called gearwork-volume*
 
-If any of these differ from what you prefer, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking
+If any of these differ from what you prefer, you can change the *env variable* (`-e`) arguments in the `cvss` bash script to your liking, or the `-v` argument for volume binding.
 
 # MYSQL Server Integration
 
