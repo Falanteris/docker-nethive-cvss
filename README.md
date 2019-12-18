@@ -152,13 +152,13 @@ Each of these requires you to supply command-line arguments.
 
 This API is tasked with inserting a specific path information based on the user preferences. The syntax is the following.
 
-               ./insertpath <path:string> <is_superuser:bool> <needs_authentication:bool>
+               ./insertpath <path:string> <needs_authentication:<1 or 0>> <is_superuser:<1 or 0>>
                
 *updatepath*
 
 This API is tasked with updating a specific path information based on the user's preferences. The syntax is the following.
 
-                ./updatepath <id:int> <path:string> <superuser:bool> <authentication:bool>
+                ./updatepath <id:int> <path:string> <superuser:<1 or 0>> <authentication:<1 or 0>> 
 
 # Wait, what is this?
 
