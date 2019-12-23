@@ -1,1 +1,1 @@
-docker run -it --network=host -v /var/nethive:/var/nethive --name cvss -e PRODUCER=ABC -e BOOTSTRAP_SERVER=10.20.144.78:9092 -e INTERFACE=10.20.144.78/24 -e ESLOC=http://10.20.144.78:9200 -e STOREINDEX=nethive-cvss  --rm nethive-cvss
+docker run -it --network=host -v /var/nethive:/var/nethive --name cvss -e PRODUCER=NETHIVESYS -e BOOTSTRAP_SERVER=172.20.10.2:9092 -e INTERFACE=127.0.0.1/24 -e ESLOC=http://172.20.10.2:9200 -e STOREINDEX=nethive-cvss  --rm nethive-cvss

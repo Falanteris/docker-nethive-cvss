@@ -17,6 +17,9 @@ let prm = promise(callbacker)
 let type = process.argv[2]
 let ip = process.argv[3]
 let url = process.argv[4]
+//console.log(type)
+//console.log(ip)
+//console.log(url)
 let fetched_res = {}
 let ready_signal = 0;
 async function runProcess(func,arg,cb){
@@ -24,7 +27,7 @@ async function runProcess(func,arg,cb){
   // Handle the error.
 		cb(res)
 	}).catch((err)=>{
-		console.log(err)
+		//console.log(err)
 	});
 }
 let Event = require("events")

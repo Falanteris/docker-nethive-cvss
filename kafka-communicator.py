@@ -25,12 +25,14 @@ def call_summarizer(msg):
 	result = subprocess.check_output(["node","merger.js",msg["vul"],msg["ip"],msg["url"]]).decode();
 	try:
 		print(result)
-		return json.loads(result);
+		result = json.loads(result);
+		#return finaldata;
 	except Exception as e:
-		print(e)
+		print("error: {}".format(str(e)))
+		err = {}
 		err["ERROR_MESSAGE"] = "An error occured while performing calculation.."
 		return err;
-	return result.stdout;
+	return json.loads(result);
 def process_message(msg):
 	msg = dict(msg)
 	msg["processed_at"] = str(datetime.datetime.now())
