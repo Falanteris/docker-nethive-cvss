@@ -32,7 +32,7 @@ def call_summarizer(msg):
 		err = {}
 		err["ERROR_MESSAGE"] = "An error occured while performing calculation.."
 		return err;
-	return json.loads(result);
+	return result;
 def process_message(msg):
 	msg = dict(msg)
 	msg["processed_at"] = str(datetime.datetime.now())
