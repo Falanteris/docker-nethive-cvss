@@ -127,9 +127,11 @@ function findMod(sets){
 // })
 
 function calc(filePath) {
-	let item = JSON.parse(fs.readFileSync(filePath))
+	let data = fs.readFileSync(filePath)
+	let item = JSON.parse(data)
+	
 	let probabils = [0,0,0,0,0,0,0];
-	let total = item.AV['0.85'] + item.AV['0.62'] + item.AV['0.55'] + item.AV['0.20'];
+	let total = item.AV['0.85'] + item.AV['0.62'] + item.AV['0.55'] + item.AV['0.2'];
 	let max_probable =  total*8 //count total prob. from AV  '0.85': 68, '0.62': 0, '0.55': 1, '0.20': 0
 
 	let queue = []
@@ -165,9 +167,11 @@ function calc(filePath) {
 	let modulus = []
 	for(sets in item){
 		let getm = findMod(item[sets])
+
 		let toBePushed = {vector:sets,mod:getm,percentage:(getm.value/total*100).toFixed(1)+"%"}
 		modulus.push(toBePushed);
 	}
+
 	var BaseCheckers = {
 			AV:["N","A","L","P"],
 			AC:["L","H"],
@@ -225,8 +229,8 @@ function calc(filePath) {
 			let final = parseFloat(avg_perc/modulus.length).toFixed(0)
 			jsonfinal.final = final;
 			output += JSON.stringify(jsonfinal)
-			// console.log(`Likely Accuracy for Vuln : ${final} %`)
-			// console.log(`Vector ${vector}`)
+			
+			
 		}
 	})
 

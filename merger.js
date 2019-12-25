@@ -3,7 +3,7 @@ let util = require("util")
 
 let promise = util.promisify;
 let custom = util.promisify.custom
-
+let errors = {};
 async function callbacker(func,arg,callback){
 	try{
 	result = func(arg);
@@ -17,6 +17,15 @@ let prm = promise(callbacker)
 let type = process.argv[2]
 let ip = process.argv[3]
 let url = process.argv[4]
+function validate(argv){
+	return argv.length == 5
+}
+if(!validate(process.argv)){
+	errors.COMMON="Incomplete Argument, Length of Argument must be equals to 5";
+	//console.log(errors)
+	return;
+}
+
 //console.log(type)
 //console.log(ip)
 //console.log(url)
@@ -40,36 +49,50 @@ let prejudice_ev = new Emitter();
 let source_ev = new Emitter();
 
 runProcess(piper.avarice,ip,(res)=>{
+	//console.log(res)
+	if(res.errors) errors.AV_ERRORS = res.stackTrace;
 	avarice_ev.emit("ready",res.result);
 });
 runProcess(piper.getSource,`JSON_SOURCE/${type}.json`,(res)=>{
+	//console.log(res)
 	//console.log(`${res} is the result`)
+	//if(res.error_reports) errors._ERRORS = res.error_reports
 	source_ev.emit("ready",res);
 });
 
 runProcess(piper.detectPR,url.split("/"),(res)=>{
 	//console.log(final)
-	prejudice_ev.emit("ready",res);
+	//console.log(res)
+	if(res.error_reports) errors.PR_ERRORS = res.error_reports;
+	prejudice_ev.emit("ready",res.result);
 })
 
 function readyCheck(){
+	//console.log(ready_signal)
 	if(ready_signal == 3){
+		//console.log("READY")
 		status_em.emit("ready",fetched_res);
 	}
 }
 
 avarice_ev.on("ready",(data)=>{
+	//console.log("AVR")
 	fetched_res['AV'] = `AV:${data}`;
 	ready_signal+=1;
 	readyCheck();
 })
 prejudice_ev.on('ready',(data)=>{
+	//console.log("A")
 	fetched_res['PR'] = `PR:${data}`;
 	ready_signal+=1;
 	readyCheck();
 })
 source_ev.on('ready',(data)=>{
-	fetched_res['STRING'] = data;
+//	console.log("SOUCE RE")
+//	console.log(data)
+//	data = JSON.parse(data);
+	fetched_res['STRING'] = data.vector;
+	fetched_res['likelyhood'] = data.final
 	ready_signal+=1;
 	readyCheck();
 })
@@ -99,13 +122,16 @@ status_em.on("ready",(data)=>{
 	//console.log(data);
 	let av_mod = modifyAV(data.STRING,data.AV)
 	let final = modifyPR(av_mod,data.PR);
+	let likelyhood = data.likelyhood;
 	//console.log(final)
 	//CVSS:3.0/"+def.replace(/.$/,"")
 	let score = piper.calculator("CVSS:3.0/"+final.replace(/.$/,""))
 	let result = {
 		vector:final,
 		score:score,
-		severity:sev(score)
+		severity:sev(score),
+		errors:errors,
+		likelyhood:`${likelyhood} %`
 	}
 	console.log(JSON.stringify(result))
 
