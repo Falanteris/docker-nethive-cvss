@@ -1,3 +1,7 @@
+# Update On December, 25th 2019
+
+    1. Separated the web API implementation on piper2.0.js
+    2. Results also contains errors for debugging, and likelyhood percentage.
 
 # Registering Event Listeners
 
