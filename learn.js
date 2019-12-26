@@ -168,7 +168,7 @@ function calc(filePath) {
 	for(sets in item){
 		let getm = findMod(item[sets])
 
-		let toBePushed = {vector:sets,mod:getm,percentage:(getm.value/total*100).toFixed(1)+"%"}
+		let toBePushed = {vector:sets,mod:getm,percentage:(getm.value/total*100).toFixed(1)}
 		modulus.push(toBePushed);
 	}
 

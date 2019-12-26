@@ -131,7 +131,7 @@ status_em.on("ready",(data)=>{
 		score:score,
 		severity:sev(score),
 		errors:errors,
-		likelyhood:`${likelyhood} %`
+		likelyhood:`${likelyhood}`
 	}
 	console.log(JSON.stringify(result))
 
