@@ -130,7 +130,9 @@ function originIsAllowed(request) {
   try{
     let protocol = request.requestedProtocols[0]
     let token = request.protocolFullCaseMap[protocol]
-    let decode = jwt.verify(token,"M0r3Sens1t1veTh4nY0urG1rlfr13nd")
+    let secret = process.env["NETHIVE_SECRET"] || "nethive"
+    //"M0r3Sens1t1veTh4nY0urG1rlfr13nd"
+    let decode = jwt.verify(token,secret)
 
     return protocol;
   }catch(err){
