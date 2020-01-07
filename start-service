@@ -1,5 +1,8 @@
-forever start ws.js 
-forever start downloader.js 
-forever start updater.js  
-forever start registerEventListener.js
+forever start -e ws_err.log -o ws_out.log ws.js 
+sleep 5
+forever start -o downloader_out.log -e downloader_err.log  downloader.js 
+sleep 5
+forever start -o updater_out.log -e updater_err.log  updater.js  
+sleep 5
+forever start -o regl_out.log -e regl_err.log registerEventListener.js
 python3 kafka-communicator.py
