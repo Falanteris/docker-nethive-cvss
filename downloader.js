@@ -136,7 +136,8 @@ let conn = net.createServer((client)=>{
 					}
 					
 					merge_emitter.on("ready",()=>{
-						let merge_proc = spawnSync("./auto_merge");
+						console.log("merging data ..")
+						let merge_proc = spawnSync("bash",["./auto_merge"]);
 						let mergeMeta = setEventTemplate("Data has been successfully merged",{"EVENT_TYPE":"EVENT_MERGE_DONE"})
 						copyClient.write(JSON.stringify(mergeMeta));
 						addr_meta_list = [];
