@@ -35,6 +35,8 @@ RUN mkdir "gzdata" "data_feeds"
 
 RUN mkdir "/var/nethive"
 
+RUN touch "/var/nethive/config.json"
+
 ENTRYPOINT ["bash","start-service"]
 
 

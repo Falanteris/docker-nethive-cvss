@@ -63,7 +63,17 @@ runProcess(piper.getSource,`JSON_SOURCE/${type}.json`,(res)=>{
 runProcess(piper.detectPR,url.split("/"),(res)=>{
 	//console.log(final)
 	//console.log(res)
-	if(res.error_reports) errors.PR_ERRORS = res.error_reports;
+	if(res.error_reports) {
+		errors.PR_ERRORS = res.error_reports;
+		let {spawn} = require("child_process");
+		insert = spawn("path_apis/insertpath",[url,"0","0"]);
+		insert.stdout.on("data",(err,data)=>{
+			console.log(err);console.log(data);
+		})
+		insert.stderr.on('data',(data)=>{
+			console.log(data.toString())
+		})
+	}
 	prejudice_ev.emit("ready",res.result);
 })
 
