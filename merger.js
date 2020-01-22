@@ -68,10 +68,10 @@ runProcess(piper.detectPR,url.split("/"),(res)=>{
 		let {spawn} = require("child_process");
 		insert = spawn("path_apis/insertpath",[url,"0","0"]);
 		insert.stdout.on("data",(err,data)=>{
-			console.log(err);console.log(data);
+			//console.log(err);console.log(data);
 		})
 		insert.stderr.on('data',(data)=>{
-			console.log(data.toString())
+			//console.log(data.toString())
 		})
 	}
 	prejudice_ev.emit("ready",res.result);
