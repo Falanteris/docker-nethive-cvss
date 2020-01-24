@@ -8,11 +8,11 @@ from pathlib import Path
 df = pd.read_json("cleaned.json");
 
 #ls = pd.DataFrame(df["list"])
-def vector_to_numeric(series):
+def vector_to_numeric(series,main_df):
 	base_value = {
 	        'AV':[0.85,0.62,0.55,0.20],
 	        'AC':[0.77,0.44],
-	        'PR':[0.85,0.62,0.27],
+	        'PR':[0.85,0.62,0.27,0.68,0.50,0.85],
 	        'UI':[0.85,0.62],
 	        'S':["U","C"],
 	        'C':[0,0.22,0.56],
@@ -22,11 +22,14 @@ def vector_to_numeric(series):
 	calc_result = {}
 	ser_list = list(series.index)
 	val_list = list(series)
+	#print(ser_list)
 	converter = base_value[ser_list[0].split(":")[0]]
+		
 	counter = 0;
 	for i in val_list:
 		calc_result[converter[counter]] = int(i);
 		counter +=1
+	#print(calc_result)
 	return calc_result;
 def cvss_parser(string):
 	obj = {}
@@ -63,7 +66,7 @@ def transform(jsondata):
 	return arrdict;
 #print(ls.head())
 #print(df.head())
-time.sleep(3)
+#time.sleep(3)
 # arrdict = {}
 # for r,c in ls.iterrows():
 # 	arrdict = transform(c.list);
@@ -74,7 +77,6 @@ time.sleep(3)
 
 #print(df.tail())
 #print(df.head())
-time.sleep(2)
 
 vul_class = ' '.join([data for data in df.cwe.unique()])
 #print(vul_class);	
@@ -101,7 +103,9 @@ score_and_id['v3BaseScore'] = pd.Series(df['v3BaseScore'].tolist())
 scores = score_and_id.groupby('v3BaseScore').count();
 scores = scores.sort_index(ascending=False);
 scores = scores.rename(columns={"id":"CVE ID Count"})
+
 #print(scores)
+#time.sleep(10)
 #ax = scores.plot.bar(y='CVE ID Count',color="gray")
 import sys
 #plt.title(sys.argv[1])
@@ -121,6 +125,9 @@ for k,v in arrdict.items():
         v = list(v);
         vectordata[k] = pd.Series(v);
 vectordata = vectordata.set_index("id");
+print(vectordata)
+#print(vectordata.describe())
+#time.sleep(60)
 #print(vectordata[vectordata['AV'] == 'A'].head() )
 
 #vectordata = vectordata.pivot_table(index=["AV","AC","PR","UI","S","C","I","A"],aggfunc=np.sum)
@@ -151,7 +158,7 @@ df_index = 0;
 BaseCheckers = {
         'AV':["N","A","L","P"],
         'AC':["L","H"],
-        'PR':["N","L","H"],
+        'PR':["N","L","H","LC","HC"],
         'UI':["N","R"],
         'S':["U","C"],
         'C':["N","L","H"],
@@ -172,26 +179,30 @@ for tup in cvss_dfs:
 	#print(tup[1].head());
 df_index = 0;
 print("Processing...");
+
 for change in cvss_dfs:
 	cve_ids = change[1].index.values
 	for cve_id in cve_ids:
 		
 	#print(change[1].index)
-		
+		get_scope = "";
 		get_val = vectordata.loc[cve_id,change[0]];
 
-
-	
 #		print(get_val);
 	#	continue;
 
 		get_val = get_val[0]
+		if(change[0] == "PR"):
+			scope = vectordata.loc[cve_id,"S"];
+			if(scope=="C"):
+				get_val += "C"
+		
 	#print(get_val)
 	#print(change[1].head())
 	#print(change[1][df_index])
 		change[1].loc[cve_id,change[0]+":"+get_val] = 1; 
 		df_index+=1;
-
+#print(cvss_dfs)
 
 # creating new subplot
 #fig, axes = plt.subplots(nrows=4,ncols=2)
@@ -200,11 +211,18 @@ for change in cvss_dfs:
 #y_count = 0
 #cvss_len = 7
 setlist = {}
+#print(cvss_dfs)
+
 for dfs in cvss_dfs:
+#	get_column_name = dfs[1].columns.values.tolist()[0].split(":")[0]
+	#dfs[1].to_csv("{}_{}.csv".format(vul_class,get),index=False)
+#	time.sleep(5)
 	scores = dfs[1].apply(np.sum)
 	colname = get_column_name(list(scores.index))
+#	dfs[1].to_csv("datasets/{}_{}.csv".format(vul_class,colname),index=False)
 	val = list(scores.values);
-	setlist[colname] = vector_to_numeric(scores);
+#	print(scores)
+	setlist[colname] = vector_to_numeric(scores,cvss_dfs);
 	
 	#scores.plot(kind='hist',subplots=True)
 	#ax = scores.plot.bar(subplots=True,color="gray")
@@ -214,6 +232,7 @@ for dfs in cvss_dfs:
 	#if y_count == 4:
 	#	x_count = 1;
 	#	y_count = 0
+
 Path("JSON_SOURCE/{}.json".format(vul_class)).touch()
 #print(setlist)
 json.dump(setlist,open("JSON_SOURCE/{}.json".format(vul_class),"w"));
