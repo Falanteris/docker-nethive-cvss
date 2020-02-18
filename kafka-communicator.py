@@ -18,6 +18,9 @@ esconfig = {
                         "corr_id":{
                                 "type":"text"
                         },
+			"vul_tag":{
+				"type":"text"
+			},
                         "timestamp":{
                                 "type":"date"
                         },
@@ -77,6 +80,7 @@ def process_message(msg):
 		new_instance = {}
 		new_instance["corr_id"] = msg["_id"]
 		new_instance["timestamp"] = msg["timestamp"]
+		new_instance["vul_tag"] = msg["vul"]
 		new_instance["SUMMARIZE_RESULT"] = call_summarizer(arg)
 	return json.dumps(new_instance)
 

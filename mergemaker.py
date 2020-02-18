@@ -22,7 +22,7 @@ def update():
 	except Exception as e:
 		print(e)
 		pass;
-	[fd.write("node reader.js data_feeds {} {}\npython3 nvd-df.py\n".format(i,config[i])) for i in config.keys()]
+	[fd.write("node reader.js data_feeds {} {}\npython3 nvd-df.py\n cd datasets \n python3 cronbach_calculator_cvss.py {}\npython3 CoVCalculator.py {}_describe.csv\n cd ..\n".format(i,config[i],config[i],config[i])) for i in config.keys()]
 
 	ls = subprocess.check_output(["chmod","+x","auto_merge"]);
 	print(ls)

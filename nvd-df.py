@@ -194,7 +194,7 @@ for change in cvss_dfs:
 		get_val = get_val[0]
 		if(change[0] == "PR"):
 			scope = vectordata.loc[cve_id,"S"];
-			if(scope=="C"):
+			if(scope=="C" and get_val !="N"):
 				get_val += "C"
 		
 	#print(get_val)
@@ -219,7 +219,9 @@ for dfs in cvss_dfs:
 #	time.sleep(5)
 	scores = dfs[1].apply(np.sum)
 	colname = get_column_name(list(scores.index))
-#	dfs[1].to_csv("datasets/{}_{}.csv".format(vul_class,colname),index=False)
+	dfs[1].fillna(0)
+	print(dfs[1])
+	dfs[1].to_csv("datasets/{}_{}.csv".format(vul_class,colname),index=False)
 	val = list(scores.values);
 #	print(scores)
 	setlist[colname] = vector_to_numeric(scores,cvss_dfs);
