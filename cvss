@@ -1,1 +1,1 @@
-docker run -it --network=host -v /var/nethive:/var/nethive --name cvss -e PRODUCER=NETHIVES -e BOOTSTRAP_SERVER=localhost:9092 -e MYSQL=test_user:test@/test -e NETHIVE_SECRET=secret -e ESLOC=http://localhost:9200 -e STOREINDEX=nethive-cvss --rm nethive-cvss
+docker run -it --network=host -v /var/nethive:/var/nethive --name cvss -e PRODUCER=NETHIVES -e BOOTSTRAP_SERVER=localhost:9092 -e MYSQL=test_user:test@/test -e NETHIVE_SECRET=secret -e ESLOC=http://elastic:changeme@localhost:9200 -e STOREINDEX=nethive-cvss --rm nethive-cvss

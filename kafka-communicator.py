@@ -6,7 +6,7 @@ import json
 import datetime
 import subprocess
 import os
-
+import time
 #print("test")
 #op  = open("kc.log","r+")
 #op.close()
@@ -41,18 +41,8 @@ esconfig = {
 		}
 	}
 
-
-try:
-	es = Elasticsearch(
-                [os.getenv("ESLOC")]
-        )
-	
-	response = es.indices.create(index="nethive-cvss",body=esconfig,ignore=400)
-	print("response : {}".format(response))
-except Exception as e:
-	es = None;
-	print(e)
-	pass
+es_online = False;
+kafka_online = False;
 
 def call_summarizer(msg):
 	result = subprocess.check_output(["node","merger.js",msg["vul"],msg["ip"],msg["url"]]).decode();
@@ -72,12 +62,12 @@ def process_message(msg):
 	msg = dict(msg)
 	msg["timestamp"] = str(datetime.datetime.now().isoformat())
 	arg = {}
+	new_instance = {}
 	# check properties, if it contains vul, ip, and url, perform calculation.
 	if "vul" in msg and "ip" in msg and "url" in msg:
 		arg["vul"] = msg["vul"]
 		arg["ip"] = msg["ip"]
 		arg["url"] = msg["url"]
-		new_instance = {}
 		new_instance["corr_id"] = msg["_id"]
 		new_instance["timestamp"] = msg["timestamp"]
 		new_instance["vul_tag"] = msg["vul"]
@@ -109,6 +99,25 @@ def log(msg):
 	#global op
 	#op.write('INFO:{}\n'.format(msg))
 #	op.close()
+def start_kafka():
+	global kafka_online
+	producer = os.getenv("PRODUCER")
+	server_port = os.getenv("BOOTSTRAP_SERVER")
+	if not producer or not server_port:
+		raise ValueError("PRODUCER and/or BOOTSTRAP_SERVER env not set.. ")
+	print("Preparing to enable kafka consumer")
+	while not bool(kafka_online):
+		try:
+			consumer = KafkaConsumer(producer,bootstrap_servers=server_port)
+			kafka_online = True
+			return consumer;
+		except Exception as e:
+			print(e)
+			print("[!] Kafka seems to be offline, retrying in 5 seconds..");
+			time.sleep(5);
+	
+	
+
 if __name__ == "__main__":
 	#sock = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);
 	#sock.connect("/tmp/piper.sock");
@@ -116,15 +125,28 @@ if __name__ == "__main__":
 
 #config = json.loads(open("kafka-config/conf.json").read())
 #template = json.loads(open("event-template.json").read());
-	producer = os.getenv("PRODUCER")
-	server_port = os.getenv("BOOTSTRAP_SERVER")
-	if not producer or not server_port:
-		raise ValueError("PRODUCER and/or BOOTSTRAP_SERVER env not set.. ")
-	print("Preparing to enable kafka consumer")
-	consumer = KafkaConsumer(producer,bootstrap_servers=server_port)
-	print("kafka consumer enabled..")
-	print("Begin summarizer");
-	for msg in consumer:
-	#print(sys.stdout)
-		log(msg.value.decode());
+	print("[+] connecting to external services..");
+	try:
+		es = Elasticsearch(
+                [os.getenv("ESLOC")]
+        )
+		print("[!] Waiting for ElasticSearch to respond");
+		while not es_online:
+			if es.ping():
+				es_online = True
+				print("[+] Elasticsearch is online.. contacting kafka server..");
+			else:
+				print("[-] Elasticsearch seems to be offline.. resetting in 5 seconds")
+				time.sleep(5)
+		response = es.indices.create(index="nethive-cvss",body=esconfig,ignore=400)
+		print("response : {}".format(response))
+	except Exception as e:
+		print(e)
+		pass
+	consumer = start_kafka();
 
+	print("[+] kafka consumer enabled..")
+	print("[+] Begin summarizer");
+	
+	for msg in consumer:
+		log(msg.value.decode());	
