@@ -7,8 +7,12 @@ import datetime
 import subprocess
 import os
 import time
+import threading
+from colorama import init, Fore, Back, Style
+
+
 #print("test")
-#op  = open("kc.log","r+")
+
 #op.close()
 #sock.connect("/tmp/piper.sock");
 esconfig = {
@@ -73,21 +77,47 @@ def process_message(msg):
 		new_instance["vul_tag"] = msg["vul"]
 		new_instance["SUMMARIZE_RESULT"] = call_summarizer(arg)
 	return json.dumps(new_instance)
+def send_cached_data():
+	with open("kc.log","r+") as f:
+		data = f.read();
+		lists = data.split("\n")
+		[es.index(index=os.getenv("STOREINDEX"),body=json.loads(msg)) for msg in lists];
+		f.close();
+	w_fd = open("kc.log","w");
+	w_fd.write("");
+	w_fd.close();
 
 def log(msg):
 	#global sock
 	global es
+	global es_online
+	global log_not_empty
 	try:
 		msg = json.loads(msg)
 		msg = process_message(msg)
-		if es:
+		if bool(es):
 			try:
 				es.index(index=os.getenv("STOREINDEX"),body=msg);
+				if log_not_empty:
+					threading.Thread(target=send_cached_data,args=(es));
 			except Exception as e:
-				print("An error occured while sending to index");
+				if not bool(es.ping()) and bool(es_online):
+					es_online = False
+					print("[!] ElasticSearch seems to have disconnected.. trying to re establish connection")
+					td = threading.Thread(target=start_elastic);
+					td.start();
+				if not bool(es_online):
+					op = open("kc.log","a+")
+					print("[+] ElasticSearch is offline.. sending results to a log file..")
+					op.write('{}\n'.format(msg))
+					op.close()
+					log_not_empty = True;
+
+				print(Fore.YELLOW+"[!] Cannot send this result to ES: {}".format(msg))
 				print(e)
+				print(Style.RESET_ALL)
 			return;
-		print("Cannot send this to ES: {}".format(msg))
+		
 	#s = socket.connect("/tmp/piper.sock");
 		#sock.send(msg.encode('utf8'));
 		#print("message sent")
@@ -95,9 +125,7 @@ def log(msg):
 		print(e)
 		print("error in processing message");
 
-	#op = open("kc.log","a+")
-	#global op
-	#op.write('INFO:{}\n'.format(msg))
+
 #	op.close()
 def start_kafka():
 	global kafka_online
@@ -116,16 +144,11 @@ def start_kafka():
 			print("[!] Kafka seems to be offline, retrying in 5 seconds..");
 			time.sleep(5);
 	
-	
-
-if __name__ == "__main__":
-	#sock = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);
-	#sock.connect("/tmp/piper.sock");
-	#print("Added Socket")
-
-#config = json.loads(open("kafka-config/conf.json").read())
-#template = json.loads(open("event-template.json").read());
-	print("[+] connecting to external services..");
+es = None;
+log_not_empty = False;
+def start_elastic():
+	global es;
+	global es_online
 	try:
 		es = Elasticsearch(
                 [os.getenv("ESLOC")]
@@ -134,19 +157,30 @@ if __name__ == "__main__":
 		while not es_online:
 			if es.ping():
 				es_online = True
-				print("[+] Elasticsearch is online.. contacting kafka server..");
+				print(Fore.GREEN+"[+] Elasticsearch is online.. contacting kafka server..");
 			else:
-				print("[-] Elasticsearch seems to be offline.. resetting in 5 seconds")
+				print(Fore.YELLOW+"[-] Elasticsearch seems to be offline.. resetting in 5 seconds")
 				time.sleep(5)
 		response = es.indices.create(index="nethive-cvss",body=esconfig,ignore=400)
 		print("response : {}".format(response))
+		print(Style.RESET_ALL)
 	except Exception as e:
 		print(e)
 		pass
-	consumer = start_kafka();
 
-	print("[+] kafka consumer enabled..")
-	print("[+] Begin summarizer");
-	
+if __name__ == "__main__":
+	#sock = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);
+	#sock.connect("/tmp/piper.sock");
+	#print("Added Socket")
+
+#config = json.loads(open("kafka-config/conf.json").read())
+#template = json.loads(open("event-template.json").read());
+	init()
+	print("[+] connecting to external services..");
+	consumer = start_kafka();
+	start_elastic()
+	print(Fore.GREEN+"[+] kafka consumer enabled..")
+	print(Fore.GREEN+"[+] Begin summarizer");
+	print(Style.RESET_ALL)
 	for msg in consumer:
 		log(msg.value.decode());	

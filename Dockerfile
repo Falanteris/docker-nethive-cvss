@@ -21,8 +21,8 @@ RUN apk add --no-cache --virtual .build-deps g++ python3-dev libffi-dev openssl-
     pip3 install pandas && \ 
     pip3 install kafka-python && \
     pip3 install cvss && \
-    pip3 install elasticsearch
-	
+    pip3 install elasticsearch && \
+    pip3 install colorama	
 RUN npm install
 
 RUN npm install -g forever
