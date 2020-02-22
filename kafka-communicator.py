@@ -107,7 +107,7 @@ def log(msg):
 					td = threading.Thread(target=start_elastic);
 					td.start();
 				if not bool(es_online):
-					op = open("kc.log","a+")
+					op = open("kc.log","w")
 					print("[+] ElasticSearch is offline.. sending results to a log file..")
 					op.write('{}\n'.format(msg))
 					op.close()
