@@ -83,7 +83,7 @@ if __name__ == "__main__":
 	for vectors in base_values:
 		merge_df[vectors] = gather_sample_var_data(vultype,vectors);
 	merge_df = pd.DataFrame(merge_df);
-	merge_df = merge_df.replace([0.0,1.0,0.56,0.22],[0.1,1.1,0.57,0.23])
+	merge_df = merge_df.replace([0.0,1.0],[1.0,2.0])
 	#print(merge_df["S"])
 	describe_result = merge_df.describe()
 	describe_result.to_csv("{}_describe.csv".format(vultype),index_label=False,index=True)
