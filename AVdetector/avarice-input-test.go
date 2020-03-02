@@ -243,7 +243,7 @@ func GenerateSubnet(ip_addr string, subnet string) (map[string]string,int,error)
 	// fmt.Println(zeros);
 	// fmt.Println("Angka 1 pada Binari");
 	// fmt.Println(ones);
-	ip_range := int(math.Pow(2,float64(ones)));
+	ip_range := int(math.Pow(2,float64(ones))) - 2;
 //	subnet_group := make([]int,4);
 // 	for k,v := range netmask {
 // 		getSlice,_ := strconv.Atoi(tobesliced[k])
