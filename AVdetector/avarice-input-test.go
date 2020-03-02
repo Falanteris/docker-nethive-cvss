@@ -199,7 +199,7 @@ func GenerateSubnet(ip_addr string, subnet string) (map[string]string,int,error)
 	
 	netmask := BinarizeCIDR(sub);
 	hostaddr := 0
-	if sub >=26 && sub <= 30{
+	if sub >=25 && sub <= 30{
 		hostaddr = 3;
 	}
 
@@ -433,6 +433,7 @@ func main(){
 	//localip,err := ParseIp(os.Args[2]) /*for testing with input*/
 	//fmt.Println(localip)
 	if err != nil{
+		fmt.Println(err)
 		return
 	}
 
