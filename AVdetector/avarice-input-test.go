@@ -61,7 +61,7 @@ func externalIP() (string, map[string]string,int, error) {
 		for _, addr := range addrs {
 			
 			naddr := stringchemist.Split(addr.String(),"/");
-			
+			// fmt.Println(addr)
 			subnets,hostaddr_loc,err:=GenerateSubnet(naddr[0],naddr[1])
 			if err != nil{
 				fmt.Println("OOPS")
@@ -243,7 +243,7 @@ func GenerateSubnet(ip_addr string, subnet string) (map[string]string,int,error)
 	// fmt.Println(zeros);
 	// fmt.Println("Angka 1 pada Binari");
 	// fmt.Println(ones);
-	ip_range := int(math.Pow(2,float64(ones))) - 2;
+	ip_range := int(math.Pow(2,float64(ones)));
 //	subnet_group := make([]int,4);
 // 	for k,v := range netmask {
 // 		getSlice,_ := strconv.Atoi(tobesliced[k])
@@ -269,8 +269,8 @@ func GenerateSubnet(ip_addr string, subnet string) (map[string]string,int,error)
 	}
 	auto_index_idx := 3;
 	curr_host := group_sum-1;
-// 	fmt.Println("SUBNET RANGE");
-// 	fmt.Println(subnet_group);
+	// fmt.Println("SUBNET RANGE");
+	// fmt.Println(subnet_group);
 
 	for grouped < ip_range{
 
@@ -330,7 +330,7 @@ func GenerateSubnet(ip_addr string, subnet string) (map[string]string,int,error)
 		curr_host +=  group_sum ;
 		
 	}
-
+	// fmt.Println(subnets)
 	return subnets,focusaddr,nil;
 	
 
@@ -371,7 +371,10 @@ func Check(ip string, ip2 string,subnets map[string]string,host_addr_loc int) (s
 		
 	HostLow,HostHigh := InBetween(ip_json2.Literal,subnets,host_addr_loc);
 	OutLow,OutHigh := InBetween(ip_json.Literal, subnets,host_addr_loc);
-	
+	// fmt.Println(HostLow)
+	// fmt.Println(HostHigh)
+	// fmt.Println(OutLow)
+	// fmt.Println(OutHigh)
 	if (HostLow != OutLow || HostHigh != OutHigh) || (OutLow == "")  || (HostLow == ""){
 
 		return "Network",nil
@@ -388,7 +391,8 @@ func InBetween(host_ip string,subnets map[string]string, addr_loc int) (string,s
 	host_addr_ip := stringchemist.Split(host_ip,".")
 	
 	host_addr,_ := strconv.Atoi(host_addr_ip[addr_loc])
-	
+	// fmt.Println("ADDR LOC")
+	// fmt.Println(addr_loc)
 
 
 	
@@ -398,6 +402,10 @@ func InBetween(host_ip string,subnets map[string]string, addr_loc int) (string,s
 		max_splitted := stringchemist.Split(max,".");
 		min_val,_ := strconv.Atoi(min_splitted[addr_loc]);
 		max_val,_ := strconv.Atoi(max_splitted[addr_loc]);
+		// fmt.Println("MIN")
+		// fmt.Println(min_val)
+		// fmt.Println("MAX")
+		// fmt.Println(max_val)
 		if addr_loc > 0 {
 			parent := host_addr_ip[addr_loc-1];
 			sample_local_parent := min_splitted[addr_loc-1];
@@ -410,6 +418,10 @@ func InBetween(host_ip string,subnets map[string]string, addr_loc int) (string,s
 			
 			LowEnd = min;
 			HighEnd = max;
+			// fmt.Println("LOW END")
+			// fmt.Println(LowEnd)
+			// fmt.Println("HIGH END")
+			// fmt.Println(HighEnd)
 			break;
 		}
 	
