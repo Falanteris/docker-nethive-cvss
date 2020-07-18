@@ -22,7 +22,7 @@ function validate(argv){
 }
 if(!validate(process.argv)){
 	errors.COMMON="Incomplete Argument, Length of Argument must be equals to 5";
-	//console.log(errors)
+	console.log(errors)
 	return;
 }
 
@@ -32,11 +32,12 @@ if(!validate(process.argv)){
 let fetched_res = {}
 let ready_signal = 0;
 async function runProcess(func,arg,cb){
+
 	const res = await prm(func,arg).then((res) => {
   // Handle the error.
 		cb(res)
 	}).catch((err)=>{
-		//console.log(err)
+		console.log(err)
 	});
 }
 let Event = require("events")
@@ -49,32 +50,39 @@ let prejudice_ev = new Emitter();
 let source_ev = new Emitter();
 
 runProcess(piper.avarice,ip,(res)=>{
-	//console.log(res)
-	if(res.errors) errors.AV_ERRORS = res.stackTrace;
-	avarice_ev.emit("ready",res.result);
+	
+	res((result)=>{
+		if(result.errors) errors.AV_ERRORS = result.stackTrace;
+
+		avarice_ev.emit("ready",result.result);
+	})
 });
 runProcess(piper.getSource,`JSON_SOURCE/${type}.json`,(res)=>{
-	//console.log(res)
 	//console.log(`${res} is the result`)
 	//if(res.error_reports) errors._ERRORS = res.error_reports
 	source_ev.emit("ready",res);
 });
 
-runProcess(piper.detectPR,url.split("/"),(res)=>{
+runProcess(piper.detectPR,ip+url,(res)=>{
 	//console.log(final)
-	//console.log(res)
-	if(res.error_reports) {
-		errors.PR_ERRORS = res.error_reports;
-		let {spawn} = require("child_process");
-		insert = spawn("path_apis/insertpath",[url,"0","0"]);
-		insert.stdout.on("data",(err,data)=>{
-			//console.log(err);console.log(data);
-		})
-		insert.stderr.on('data',(data)=>{
-			//console.log(data.toString())
-		})
-	}
+	
+	//since the variable is a promise, it has to be handled this way
+	
+
 	prejudice_ev.emit("ready",res.result);
+	
+	// if(res.error_reports) {
+	// 	errors.PR_ERRORS = res.error_reports;
+	// 	let {spawn} = require("child_process");
+	// 	insert = spawn("path_apis/insertpath",[url,"0","0"]);
+	// 	insert.stdout.on("data",(err,data)=>{
+	// 		//console.log(err);console.log(data);
+	// 	})
+	// 	insert.stderr.on('data',(data)=>{
+	// 		//console.log(data.toString())
+	// 	})
+	// }
+	
 })
 
 function readyCheck(){
@@ -98,8 +106,8 @@ prejudice_ev.on('ready',(data)=>{
 	readyCheck();
 })
 source_ev.on('ready',(data)=>{
-//	console.log("SOUCE RE")
-//	console.log(data)
+	// console.log("SOUCE RE")
+	// console.log(data)
 //	data = JSON.parse(data);
 	fetched_res['STRING'] = data.vector;
 	fetched_res['likelyhood'] = data.final
