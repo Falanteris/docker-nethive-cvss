@@ -1,7 +1,8 @@
 let https = require("https");
 let ev = require("events")
 let template = require("./event-template")
-
+let fs = require("fs")
+let isAccessible = require('fs').accessSync;
 // let request = require('request');
 //let gunzip = require("gunzip-file")
 let addresses = [];
@@ -14,56 +15,16 @@ let {spawn,spawnSync} = require("child_process")
 let util = require("util")
 let downloadUrls = []
 class em extends ev{}
-async function downloadZip(addr,file,cb){
-// 	let https = require("https")
-//     var body = '';
-//     let dest = file
-//     var file = require('fs').createWriteStream(file);
-//  //    let options = {
-//  //    	headers: {
-//  //        'Content-Type': 'application/gzip',
-//  //    	}
-//  //    }
-//  //    https.get(addr,options, function(res) {
-
-//  //    res.on('data', function(chunk){
-//  //        file.write(chunk);
-//  //        }).on('end', function(){
-//  //          file.end();
-// 	// cb(dest);
-//  //     });
-// 	// })    
-// 	await new Promise((resolve, reject) => {
-//     let stream = request({
-//         /* Here you should specify the exact link to the file you are trying to download */
-//         uri: addr,
-//         headers: {
-//             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-//             'Accept-Encoding': 'gzip, deflate, br',
-//             'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8,ro;q=0.7,ru;q=0.6,la;q=0.5,pt;q=0.4,de;q=0.3',
-//             'Cache-Control': 'max-age=0',
-//             'Content-Type':'application/gzip',
-//             'Connection': 'keep-alive',
-//             'Upgrade-Insecure-Requests': '1',
-//             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
-//         },
-//         /* GZIP true for most of the websites now, disable it if you don't need it */
-//         gzip: true
-//     })
-//     .pipe(file)
-//     .on('finish', () => {
-//         console.log(`The file is finished downloading.`);
-//         resolve();
-//     })
-//     .on('error', (error) => {
-//         reject(error);
-//     })
-// }).then(()=>{
-// 	cb(dest)
-// }).catch(error => {
-//     console.log(`Something happened: ${error}`);
-
-// })
+let prep_em = new em();
+function socketExists(socket){
+	let exist;
+	try{
+		isAccessible(socket)
+		exist = true;
+	}catch(err){
+		
+	}
+	return exist;
 }
 function openConfig(){
 	let data = JSON.parse(require("fs").readFileSync("configs/conf.json").toString())
@@ -173,12 +134,55 @@ function getMeta(addr,meta,saveto){
 		})
 	}
 }
-let client = net.createConnection("/tmp/piper.sock",()=>{
+function createconn(socket){
+	let err = false
+	
+	net.createConnection(socket,()=>{
+
+	})
+
+}
+let availability = 0
+function checkSockets(){
+
+	if(socketExists("/tmp/piper.sock")){
+		prep_em.emit("piper-ready")
+	}
+	if(socketExists("/tmp/updater.sock")){
+		prep_em.emit("updater-ready")
+	}
+	console.log("[-] Socket unavailable..")
+
+}
+
+let client
+let updateclient
+let checks = setInterval(checkSockets,1000)
+prep_em.on("piper-ready",()=>{
+ client = net.createConnection("/tmp/piper.sock",()=>{
 	console.log("[+] Connected to notification service..");
 	
-});
-let updateclient = net.createConnection("/tmp/updater.sock",()=>{
-	console.log("[+] Connected to download service..");
+ });
+ availability +=1
+ if(availability==2){
+ 	clearInterval(checks)
+ 	for (i in addresses){
+		runAsync(addresses[i],metafile[i],savefile[i]==undefined?metafile[i].replace(".meta",".tgz"):savefile[i]);
+	}
+ }
+})
+prep_em.on("updater-ready",()=>{
+	updateclient = net.createConnection("/tmp/updater.sock",()=>{
+		console.log("[+] Connected to download service..");
+	})
+
+ availability +=1
+ if(availability==2){
+ 	clearInterval(checks)
+ 	for (i in addresses){
+		runAsync(addresses[i],metafile[i],savefile[i]==undefined?metafile[i].replace(".meta",".tgz"):savefile[i]);
+	}
+ }
 })
 process.on("exit",()=>{
 	console.log("Notifying downloader..");
@@ -281,8 +285,5 @@ function compareData(old,recent){
 // 	})
 // }
 
-for (i in addresses){
-	runAsync(addresses[i],metafile[i],savefile[i]==undefined?metafile[i].replace(".meta",".tgz"):savefile[i]);
-}
 // console.log("[+] Starting configs/conf.json Listener..")
 // asyncFileListener()

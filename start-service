@@ -1,11 +1,6 @@
 forever start -e /var/nethive/ws_err.log -o /var/nethive/ws_out.log ws.js 
-sleep 5
 forever start -o /var/nethive/downloader_out.log -e /var/nethive/downloader_err.log  downloader.js 
-sleep 5
 forever start -o /var/nethive/updater_out.log -e /var/nethive/updater_err.log  updater.js  
-sleep 5
 forever start -o /var/nethive/regl_out.log -e /var/nethive/regl_err.log registerEventListener.js
-sleep 5
 forever start -o /var/nethive/labelEventOut.log -e /var/nethive/labelEventErr.log labelEventListener.js
-sleep 5
 python3 kafka-communicator.py

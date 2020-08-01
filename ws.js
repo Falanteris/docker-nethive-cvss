@@ -160,7 +160,6 @@ wsServer.on('request', function(request) {
     console.log((new Date()) + ' Connection accepted.');
     
     if(minicache.length != 0){
-      console.log("SENDING CACHE")
   	 minicache.forEach((data)=>{
 		  connection.sendUTF(JSON.stringify(data));
 	   })

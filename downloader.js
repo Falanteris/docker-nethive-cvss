@@ -9,7 +9,19 @@ let wssock = "/tmp/piper.sock"
 let ungzipped = 0;
 let Event = require("events")
 class Emitter extends Event{}
+let fs = require("fs")
 let merge_emitter = new Emitter();
+let prep_em = new Emitter()
+function socketExists(socket){
+	let exist;
+	try{
+		isAccessible(socket)
+		exist = true;
+	}catch(err){
+		
+	}
+	return exist;
+}
 function setEventTemplate(data,opts={}){
 	template["EVENT_TYPE"]= opts.EVENT_TYPE || "UPDATE";
 	template["EVENT_DATA"] = data;
@@ -17,11 +29,90 @@ function setEventTemplate(data,opts={}){
 	template["@timestamp"] = date_time.toString();
 	return template;
 }
-let client = net.createConnection(wssock);
-let copyClient = client;
-let addresses = []
-let savefile = []
-let metafile = []
+function checkSockets(){
+
+	let chk = socketExists(wssock)
+	console.log(chk)
+	if(chk){
+		prep_em.emit("piper-ready")
+	}
+	console.log("[-] Socket unavailable..")
+
+}
+
+let client,copyClient,conn
+let availability = 0
+let checks = setInterval(checkSockets,1000)
+prep_em.on("piper-ready",()=>{
+ client = net.createConnection(wssock,()=>{
+	console.log("[+] Connected to notification service..");
+	
+ });
+ availability +=1
+ if(availability==1){
+ 	clearInterval(checks)
+ 	// start service here.
+ 	copyClient = client;
+ 	let addresses = []
+	let savefile = []
+	let metafile = []
+	openConfig();
+	conn = net.createServer((client)=>{
+	conn.getConnections((err,count)=>{
+		if(count>1){
+			client.destroy();
+			return;
+		}
+
+		client.on('data',(data)=>{
+			try{
+				if(validate_newdata(data)){
+					addr_meta_list.push(JSON.parse(data.toString()))
+				}	
+			}catch(err){
+				client.write("error in parsing data..  must be in JSON format with the schema of {addr:<>,meta:<>}");
+			}
+		})
+		client.on('close',()=>{
+					console.log("Downloading..")
+					console.log(addr_meta_list)
+					for(i in addr_meta_list){
+						let pair = addr_meta_list[i]
+						download_runner(pair.meta,pair.addr);
+					}
+					
+					merge_emitter.on("ready",()=>{
+						console.log("merging data ..")
+						let merge_proc = spawnSync("bash",["./auto_merge"]);
+						let mergeMeta = setEventTemplate("Data has been successfully merged",{"EVENT_TYPE":"EVENT_MERGE_DONE"})
+						copyClient.write(JSON.stringify(mergeMeta));
+						addr_meta_list = [];
+						ungzipped = 0;
+					});
+		})
+	})
+})
+
+if(socketExists(sock)){
+		//so that it can work properly with forever daemon
+		//since it doesn't send proper kill signal for the process events to be emitted
+        unlink(sock)
+}
+process.on("SIGINT",()=>{
+	if(socketExists(sock)){
+		unlink(sock);
+	}
+	conn.close()
+})
+process.on("SIGTERM",()=>{
+	if(socketExists(sock)){
+		unlink(sock);
+	}
+	conn.close()
+})
+conn.listen(sock)
+ }
+})
 function openConfig(){
 	let data = JSON.parse(require("fs").readFileSync("configs/conf.json").toString())
 	addresses = data.target;
@@ -81,21 +172,8 @@ function download_runner(meta,addr){
 			})
 }
 let addr_meta_list = []
-// let conn = socket((data)=>{
-	
-// 		try{
-// 			addr_meta_list.append(JSON.parse(data.toString()))
-// 		}catch(err){
-// 			client.write("error in parsing data..  must be in JSON format with the schema of {addr:<>,meta:<>}");
-// 		}
-// 	client.on("close",()=>{
-// 		addr_meta_list.forEach((pair)=>{
-// 			download_runner(pair.meta,pair.addr);
-// 		})
-// 	})
-// },sock,1)
-// conn.listen(sock)
-openConfig();
+
+
 let validate_newdata = (data)=>{
 	data = JSON.parse(data.toString())
 	if(data.meta == undefined || data.addr == undefined){
@@ -111,66 +189,4 @@ let validate_newdata = (data)=>{
 	}
 	return true;
 }
-let conn = net.createServer((client)=>{
-	conn.getConnections((err,count)=>{
-		if(count>1){
-			client.destroy();
-			return;
-		}
 
-		client.on('data',(data)=>{
-			try{
-				if(validate_newdata(data)){
-					addr_meta_list.push(JSON.parse(data.toString()))
-				}	
-			}catch(err){
-				client.write("error in parsing data..  must be in JSON format with the schema of {addr:<>,meta:<>}");
-			}
-		})
-		client.on('close',()=>{
-					console.log("Downloading..")
-					console.log(addr_meta_list)
-					for(i in addr_meta_list){
-						let pair = addr_meta_list[i]
-						download_runner(pair.meta,pair.addr);
-					}
-					
-					merge_emitter.on("ready",()=>{
-						console.log("merging data ..")
-						let merge_proc = spawnSync("bash",["./auto_merge"]);
-						let mergeMeta = setEventTemplate("Data has been successfully merged",{"EVENT_TYPE":"EVENT_MERGE_DONE"})
-						copyClient.write(JSON.stringify(mergeMeta));
-						addr_meta_list = [];
-						ungzipped = 0;
-					});
-		})
-	})
-})
-function socketExists(){
-	let exist;
-	try{
-		isAccessible(sock)
-		exist = true;
-	}catch(err){
-			
-	}
-	return exist;
-}
-if(socketExists()){
-		//so that it can work properly with forever daemon
-		//since it doesn't send proper kill signal for the process events to be emitted
-        unlink(sock)
-}
-process.on("SIGINT",()=>{
-	if(socketExists()){
-		unlink(sock);
-	}
-	conn.close()
-})
-process.on("SIGTERM",()=>{
-	if(socketExists()){
-		unlink(sock);
-	}
-	conn.close()
-})
-conn.listen(sock)
