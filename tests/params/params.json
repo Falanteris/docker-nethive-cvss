@@ -1,0 +1,14 @@
+[
+
+    {
+        "vul":"SQLi",
+        "ip":"youtube.com",
+        "url":"/watch"
+    },
+    {
+        "vul":"XSS",
+        "ip":"192.168.100.7",
+        "url":"/index"
+    }
+    
+]

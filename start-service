@@ -1,3 +1,4 @@
+#!/bin/bash
 forever start -e /var/nethive/ws_err.log -o /var/nethive/ws_out.log ws.js 
 forever start -o /var/nethive/downloader_out.log -e /var/nethive/downloader_err.log  downloader.js 
 forever start -o /var/nethive/updater_out.log -e /var/nethive/updater_err.log  updater.js  

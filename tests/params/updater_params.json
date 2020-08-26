@@ -1,0 +1,6 @@
+[
+    {
+        "PRODUCER":"KAFKATEST",
+        "BOOTSTRAP_SERVER":"localhost:9092"
+    }
+]
