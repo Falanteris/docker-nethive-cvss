@@ -8,7 +8,9 @@ change mod for cvss bash
 
     chmod ./cvss 
 
-and it should run.
+and it should run with the command
+
+     ./cvss
 
 
 # Update on August, 30th 2020
