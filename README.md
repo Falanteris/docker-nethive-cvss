@@ -1,3 +1,7 @@
+# Update on August, 30th 2020
+
+    1. Implemented Py.test easy testing.
+    
 # Update On December, 25th 2019
 
     1. Separated the web API implementation on piper2.0.js
