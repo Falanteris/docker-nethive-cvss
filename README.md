@@ -1,3 +1,18 @@
+# CVSS Tag-Based Calculation System
+
+This application directly extracts data from NVD regularly and can perform integration if the user desires. It is recommended to use Docker to bundle this application and wrap it into 
+
+    docker build -t nethive-cvss .
+
+change mod for cvss bash
+
+    chmod ./cvss 
+
+and it should run with the command
+
+     ./cvss
+
+
 # Update on August, 30th 2020
 
     1. Implemented Py.test easy testing.
