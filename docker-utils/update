@@ -1,0 +1,5 @@
+docker exec -it cvss forever stop updater.js
+echo "[+] stopped service.."
+docker exec -it cvss forever start updater.js
+echo "[+] restarted updater.."
+

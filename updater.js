@@ -12,7 +12,8 @@ let metafile = []
 let {ungzip} = require("node-gzip");
 let net = require('net')
 let {spawn,spawnSync} = require("child_process")
-let util = require("util")
+let util = require("util");
+const { get } = require("request-promise");
 let downloadUrls = []
 class em extends ev{}
 let prep_em = new em();
@@ -106,22 +107,20 @@ function getMeta(addr,meta,saveto){
 				bufferData += meta.toString();
 			})
 			res.on("end",()=>{
-		
-				if(checkMeta(bufferData,meta)){
-
-					console.log(`New Data Detected on ${addr}.. download the latest .gz file`)
-					let writeStream = require('fs').createWriteStream(meta)
-					writeStream.write(bufferData)
-					let d = setEventTemplate(meta);
-					//console.log(meta)
-					//contentman(JSON.stringify(d));
-					//downloadZip(addr,saveto);
-		
-					metaEvent.emit("new",d,addr);
-				}
-				else{
+				if(metaEvent){	
+					if(checkMeta(bufferData,meta)){
 					
-					console.log("Meta is still the same..")
+						console.log(`New Data Detected on ${addr}.. download the latest .gz file`)
+						let writeStream = require('fs').createWriteStream(meta)
+						writeStream.write(bufferData)
+						let d = setEventTemplate(meta);
+						metaEvent.emit("new",d,addr);
+					
+					}
+					else{
+					
+						console.log("Meta is still the same..")
+					}
 				}
 			})
 		}).on("error",(err)=>{
@@ -130,7 +129,9 @@ function getMeta(addr,meta,saveto){
 			err_ev.name = addr;
 		
 			let data = setEventTemplate(err_ev,{"EVENT_TYPE":"EVENT_ERROR"})
-			client.write(JSON.stringify(data));
+			if(client){
+				client.write(JSON.stringify(data));
+			}
 		})
 	}
 }
@@ -154,7 +155,10 @@ function checkSockets(){
 	console.log("[-] Socket unavailable..")
 
 }
-
+if(require.main == module){
+console.log("[+] Parsing configs..")
+openConfig()
+console.log("[+] Running 1 minute updates..");
 let client
 let updateclient
 let checks = setInterval(checkSockets,1000)
@@ -210,7 +214,7 @@ metaEvent.on("new",(meta,addr)=>{
 
 
 })
-
+}
 function download(addr,meta,saveto){
 
 /*
@@ -237,9 +241,7 @@ async function runAsync(addr,meta,saveto){
 	setInterval(()=>{download(addr,meta,saveto)},60*1000);
 }
 
-console.log("[+] Parsing configs..")
-openConfig()
-console.log("[+] Running 1 minute updates..");
+
 function compareData(old,recent){
 	let newdata = []
 	for (i in recent){
@@ -287,3 +289,6 @@ function compareData(old,recent){
 
 // console.log("[+] Starting configs/conf.json Listener..")
 // asyncFileListener()
+module.exports = {
+	meta: getMeta
+}

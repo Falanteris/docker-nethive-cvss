@@ -42,6 +42,7 @@ function checkSockets(){
 
 let client,copyClient,conn
 let availability = 0
+function main(){
 let checks = setInterval(checkSockets,1000)
 prep_em.on("piper-ready",()=>{
  client = net.createConnection(wssock,()=>{
@@ -113,6 +114,10 @@ process.on("SIGTERM",()=>{
 conn.listen(sock)
  }
 })
+}
+if (require.main === module) {
+    main()
+}
 function openConfig(){
 	let data = JSON.parse(require("fs").readFileSync("configs/conf.json").toString())
 	addresses = data.target;
@@ -130,12 +135,14 @@ async function ungzipper(data,saveTo,meta){
 		meta["EVENT_TYPE"]  = "EVENT_EXTRACT_DONE"
 		let date_time = new Date();
 		meta["EVENT_DATA"] = `${saveTo}`
-	    meta["@timestamp"] = date_time.toString()
+		meta["@timestamp"] = date_time.toString()
+		if(client){
 	    client.write(JSON.stringify(meta));
 	    ungzipped += 1
 	    if(ungzipped == addr_meta_list.length){
 			merge_emitter.emit("ready");
-	    }
+		}
+		}
 	})
 }
 function wget_runner(meta,addr){
@@ -143,9 +150,10 @@ function wget_runner(meta,addr){
 		let instance = spawnSync("wget",['-O',`gzdata/${meta.EVENT_DATA}.json.gz`,`${addr}.json.gz`]);
 		meta["EVENT_TYPE"]  = "EVENT_UPDATE_DONE"
 		let date_time = new Date();
-	    	meta["@timestamp"] = date_time.toString()
-		client.write(JSON.stringify(meta));	
-		
+		meta["@timestamp"] = date_time.toString()
+		if(client!=undefined){
+			client.write(JSON.stringify(meta));	
+		}
 		return instance;	
 }
 function download_runner(meta,addr){
@@ -189,4 +197,6 @@ let validate_newdata = (data)=>{
 	}
 	return true;
 }
+
+module.exports = {downloader:wget_runner,ungzipper:ungzipper}
 

@@ -43,6 +43,12 @@ RUN mkdir "/var/nethive"
 
 RUN touch "/var/nethive/config.json"
 
+RUN node prebuild-meta.js
+
+RUN node prebuild-integration.js
+
+RUN ./auto_merge
+
 ENTRYPOINT ["bash","start-service"]
 
 
