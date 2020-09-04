@@ -1,6 +1,12 @@
-node reader.js data_feeds CWE-400 DDOS
-python3 nvd-df.py
 node reader.js data_feeds CWE-79 XSS
 python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py XSS
+python3 CoVCalculator.py XSS_describe.csv
+ cd ..
 node reader.js data_feeds CWE-89 SQLi
 python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py SQLi
+python3 CoVCalculator.py SQLi_describe.csv
+ cd ..

@@ -432,7 +432,10 @@ func InBetween(host_ip string,subnets map[string]string, addr_loc int) (string,s
 
 }
 func main(){
-	
+	if os.Args[1] == "0.0.0.0" || os.Args[1] == "127.0.0.1" {
+		fmt.Println("Adjacent")
+		return
+	}
 	res,err := ParseIp(os.Args[1])
 	if err != nil{
 		return

@@ -6,6 +6,7 @@ import time
 class TestNethiveCvss():
     def test_merger(self, config_merger_param):
         msg = config_merger_param
+        print(msg)
         output = subprocess.check_output(["node","merger.js",msg["vul"],msg["ip"],msg["url"]],cwd="../").decode()
         check = {}
         try:

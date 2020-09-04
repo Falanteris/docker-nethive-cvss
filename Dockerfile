@@ -22,7 +22,9 @@ RUN apk add --no-cache --virtual .build-deps g++ python3-dev libffi-dev openssl-
     pip3 install kafka-python && \
     pip3 install cvss && \
     pip3 install elasticsearch && \
-    pip3 install colorama	
+    pip3 install colorama
+
+	
 RUN npm install
 
 RUN npm install -g forever
@@ -32,6 +34,10 @@ RUN chmod +x start-service
 RUN chmod +x auto_merge
 
 RUN mkdir "gzdata" "data_feeds"
+
+RUN cd tests && \
+    pip3 install -r requirements.txt && \
+    py.test unit_tests.py -s
 
 RUN mkdir "/var/nethive"
 

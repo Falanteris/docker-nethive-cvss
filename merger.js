@@ -15,7 +15,7 @@ async function callbacker(func,arg,callback){
 
 let prm = promise(callbacker)
 let type = process.argv[2]
-let ip = process.argv[3]
+let ip = process.argv[3] || "0.0.0.0"
 let url = process.argv[4]
 function validate(argv){
 	return argv.length == 5
