@@ -1,3 +1,6 @@
+numpy
 kafka-python
 pandas
 elasticsearch
+cvss
+colorama

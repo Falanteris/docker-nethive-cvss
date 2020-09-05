@@ -1,30 +1,21 @@
-FROM python:alpine
+FROM node:12.18.3
 
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN apk update
+RUN apt-get update
 
-RUN apk upgrade
+RUN apt-get upgrade --assume-yes
 
-RUN apk add bash
+RUN apt-get install python3-pip --assume-yes
 
-RUN apk add libc6-compat
+RUN pip3 install --upgrade pip setuptools
 
-RUN apk add --update npm
+RUN pip3 install -r requirements.txt
 
-RUN apk add --no-cache --virtual .build-deps g++ python3-dev libffi-dev openssl-dev && \
-    apk add --no-cache --update python3 && \
-    pip3 install --upgrade pip setuptools && \
-    pip3 install numpy && \
-    pip3 install pandas && \ 
-    pip3 install kafka-python && \
-    pip3 install cvss && \
-    pip3 install elasticsearch && \
-    pip3 install colorama
+RUN apt-get install -y curl
 
-	
 RUN npm install
 
 RUN npm install -g forever
@@ -37,7 +28,7 @@ RUN mkdir "gzdata" "data_feeds"
 
 RUN cd tests && \
     pip3 install -r requirements.txt && \
-    py.test unit_tests.py -s
+    py.test unit_tests.py -s -k merge
 
 RUN mkdir "/var/nethive"
 
