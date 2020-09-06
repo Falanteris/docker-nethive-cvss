@@ -31,8 +31,11 @@ esconfig = {
                         "SUMMARIZE_RESULT":{
                                 "type":"object",
                                 "properties":{
+					"stat_vector":{"type":"text"},
                                         "vector":{"type":"text"},
+					"stat_score":{"type":"float"},
                                         "score":{"type":"float"},
+					"stat_severity":{"type":"text"},
                                         "severity":{"type":"text"},
                                         "errors":{
                                                 "type":"object"

@@ -143,10 +143,14 @@ status_em.on("ready",(data)=>{
 	let likelyhood = data.likelyhood;
 	//console.log(final)
 	//CVSS:3.0/"+def.replace(/.$/,"")
-	let score = piper.calculator("CVSS:3.0/"+final.replace(/.$/,""))
+	let score = piper.calculator("CVSS:3.0/"+final.replace(/.$/,"")).trim()
+	let stat_score = piper.calculator("CVSS:3.0/"+data.STRING.replace(/.$/,"")).trim()
 	let result = {
+		stat_vector:data.STRING,
 		vector:final,
+		stat_score:stat_score,
 		score:score,
+		stat_severity:sev(stat_score),
 		severity:sev(score),
 		errors:errors,
 		likelyhood:`${likelyhood}`
