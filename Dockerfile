@@ -38,7 +38,17 @@ RUN node prebuild-meta.js
 
 RUN node prebuild-integration.js
 
-RUN ./auto_merge
+RUN ./auto_merge 
+
+ENV PRODUCER=NETHIVES
+
+ENV BOOTSTRAP_SERVER=localhost:9092
+
+ENV NETHIVE_SECRET=secret
+
+ENV ESLOC=http://elastic:changeme@localhost:9200
+
+ENV STOREINDEX=nethive-cvss
 
 ENTRYPOINT ["bash","start-service"]
 
