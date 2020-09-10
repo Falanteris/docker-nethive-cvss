@@ -9,9 +9,9 @@ You can get the control panel tools here: https://github.com/Falanteris/nethive-
 
 Currently, we have created a docker registry that stores the image. It's hosted in http://rk-sragen.site:5043/nethive-cvss. You can login as a pull-only user with the following credentials.
 
-    $ docker login -u cvss -p pullmyimage rk-sragen.site:5043
-    $ docker pull rk-sragen.site:5043/nethive-cvss
-    $ docker tag nethive-cvss rk-sragen.site:5043/nethive-cvss
+    $ docker login -u cvss -p pullmyimage nethive.me
+    $ docker pull nethive.me/cvss
+    $ docker tag nethive-cvss nethive.me/cvss
 
 this would pull the image directly into your docker system and install it, depending on your connection speed, it may take a while. The image is also being re-build everyday with Jenkins CI. So that newer users can quickly catch up to speed to the latest changes in NVD data as the image builds includes it's integration as well.
 
