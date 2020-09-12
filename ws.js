@@ -3,7 +3,8 @@ var WebSocketClient = require('websocket').client;
 var WebSocketFrame  = require('websocket').frame;
 var WebSocketRouter = require('websocket').router;
 var W3CWebSocket = require('websocket').w3cwebsocket;
-var jwt = require("jsonwebtoken");
+var assert = require("assert")
+//var jwt = require("jsonwebtoken");
 let url = require("url")
 let sock = "/tmp/piper.sock"
 var fs = require("fs");
@@ -132,8 +133,8 @@ function originIsAllowed(request) {
     let token = request.protocolFullCaseMap[protocol]
     let secret = process.env["NETHIVE_SECRET"] || "nethive"
     //"M0r3Sens1t1veTh4nY0urG1rlfr13nd"
-    let decode = jwt.verify(token,secret)
-
+    assert.ok(secret == token)
+    //let decode = jwt.verify(token,secret)
     return protocol;
   }catch(err){
  
