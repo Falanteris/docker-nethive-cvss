@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "falanteris": "^1.4.15",
     "fs-extra": "^8.1.0",
     "gunzip-file": "^0.1.1",
     "jsonwebtoken": "^8.5.1",
