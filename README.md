@@ -1,4 +1,4 @@
-[![buddy pipeline](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278964/badge.svg?token=9114cadb0556693d535af80caad668061508781364e36c932734c3058503fa9c "buddy pipeline")](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278964)
+
 # CVSS Tag-Based Calculation System
 
 This application directly extracts data from NVD regularly and can perform integration if the user desires. It is recommended to use Docker to bundle this application and wrap it into 
