@@ -9,7 +9,7 @@ You can get the control panel tools here: https://github.com/Falanteris/nethive-
 # Installation
 1. Directly Pulling and Running the image.
 
-Currently, we have created a docker registry that stores the image. It's hosted in http://rk-sragen.site:5043/nethive-cvss. You can login as a pull-only user with the following credentials.
+Currently, we have created a docker registry that stores the image. It's hosted in http://nethive.me You can login as a pull-only user with the following credentials.
 
     $ docker login -u cvss -p pullmyimage nethive.me
     $ docker pull nethive.me/cvss
