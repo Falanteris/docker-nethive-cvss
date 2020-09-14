@@ -28,6 +28,9 @@ esconfig = {
                         "timestamp":{
                                 "type":"date"
                         },
+			"payload":{
+				"type":"text"
+			},
                         "SUMMARIZE_RESULT":{
                                 "type":"object",
                                 "properties":{
