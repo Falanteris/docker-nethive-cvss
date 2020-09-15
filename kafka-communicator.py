@@ -82,6 +82,7 @@ def process_message(msg):
 		new_instance["timestamp"] = msg["timestamp"]
 		new_instance["vul_tag"] = msg["vul"]
 		new_instance["SUMMARIZE_RESULT"] = call_summarizer(arg)
+		new_instance["payload"] = msg["payload"]
 	return json.dumps(new_instance)
 def send_cached_data():
 	with open("kc.log","r+") as f:
