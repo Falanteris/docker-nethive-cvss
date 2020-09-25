@@ -1,8 +1,25 @@
 [![buddy pipeline](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278971/badge.svg?token=9114cadb0556693d535af80caad668061508781364e36c932734c3058503fa9c "buddy pipeline")](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278971)
 
+<h1 align="center">
+  <br>
+  <a href="https://github.com/chrisandoryan/Nethive-Project">
+  <img src="graphics/logo.png" align="center" alt="nethive-logo"></a>
+  <br>
+</h1>
+
 # CVSS Tag-Based Calculation System
 
-This application directly extracts data from NVD regularly and can perform integration if the user desires. It is recommended to use Docker to bundle this application and wrap it into 
+This application directly extracts data from NVD regularly and can perform integration if the user desires.
+# Pre-Requisites
+
+1. Apache Kafka
+
+You can get Apache Kafka from here : https://www.apache.org/dyn/closer.cgi?path=/kafka/2.6.0/kafka_2.13-2.6.0.tgz
+
+2. Nethive SIEM
+
+You can get our SIEM system from here : 
+
 # Control Panel Tools
 You can get the control panel tools here: https://github.com/Falanteris/nethive-cvss-utils
 
