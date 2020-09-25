@@ -1,11 +1,5 @@
 [![buddy pipeline](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278971/badge.svg?token=9114cadb0556693d535af80caad668061508781364e36c932734c3058503fa9c "buddy pipeline")](https://app.buddy.works/rayhanrts/docker-nethive-cvss/pipelines/pipeline/278971)
 
-<h1 align="center">
-  <br>
-  <a href="https://github.com/chrisandoryan/Nethive-Project">
-  <img src="graphics/logo.png" align="center" alt="nethive-logo"></a>
-  <br>
-</h1>
 
 # CVSS Tag-Based Calculation System
 
