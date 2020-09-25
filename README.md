@@ -2,17 +2,20 @@
 
 
 # CVSS Tag-Based Calculation System
-
 This application directly extracts data from NVD regularly and can perform integration if the user desires.
+
+
 # Pre-Requisites
 
 1. Apache Kafka
 
 You can get Apache Kafka from here : https://www.apache.org/dyn/closer.cgi?path=/kafka/2.6.0/kafka_2.13-2.6.0.tgz
 
+You can follow the Apache Kafka quickstart tutorial here, which would mention the link above : https://kafka.apache.org/quickstart
+
 2. Nethive SIEM
 
-You can get our SIEM system from here : 
+You can get our SIEM system from here : https://github.com/chrisandoryan/Nethive-Project
 
 # Control Panel Tools
 You can get the control panel tools here: https://github.com/Falanteris/nethive-cvss-utils
