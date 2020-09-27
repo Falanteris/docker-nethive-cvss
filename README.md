@@ -1,12 +1,40 @@
-[![Build Status](http://rk-sragen.site:8080/buildStatus/icon?job=CvssApi1720)](http://rk-sragen.site:8080/job/CvssApi1720/)
+
+[![Build Status](http://rk-sragen.site:8080/buildStatus/icon?job=CvssApi)](http://rk-sragen.site:8080/job/CvssApi/)
+<h1 align="center">
+  <br>
+  <a href="https://github.com/Falanteris/docker-nethive-cvss/">
+  <img src="graphics/logo.png" align="center" alt="nethive-logo"></a>
+  <br>
+</h1>
+
+<p align="center">
+  <a href="#pre-requisites">Pre-Requisites</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#control-panel-tools">Control Panel Installation</a>
+</p>
+
 
 # CVSS Tag-Based Calculation System
+This application directly extracts data from NVD regularly and can perform integration if the user desires.
 
-This application directly extracts data from NVD regularly and can perform integration if the user desires. It is recommended to use Docker to bundle this application and wrap it into 
-# Control Panel Tools
+
+## Pre-Requisites
+
+1. Apache Kafka
+
+You can get Apache Kafka from here : https://www.apache.org/dyn/closer.cgi?path=/kafka/2.6.0/kafka_2.13-2.6.0.tgz
+
+You can follow the Apache Kafka quickstart tutorial here, which would mention the link above : https://kafka.apache.org/quickstart
+
+2. Nethive SIEM
+
+You can get our SIEM system from here : https://github.com/chrisandoryan/Nethive-Project
+
+## Control Panel Tools
 You can get the control panel tools here: https://github.com/Falanteris/nethive-cvss-utils
 
-# Installation
+## Installation
 1. Directly Pulling and Running the image.
 
 Currently, we have created a docker registry that stores the image. It's hosted in http://nethive.me You can login as a pull-only user with the following credentials.
@@ -28,9 +56,17 @@ If you don't like typing docker login passwords and/or prefer to build it your o
      $ git clone https://github.com/Falanteris/docker-nethive-cvss
      $ cd docker-nethive-cvss
      $ docker build -t nethive.me/cvss .
-     $ ./cvss
 
 And we're done!. The nethive-cvss system would run smoothly. Of course you can edit the *cvss* script to fit your system architecture. But other than that, it should accomplish the same thing that the first method did. Only with more processing power required since you would need to build the image yourself. 
+
+## Quick-Start
+
+If you have downloaded our Control Panel. Once you navigate to it's directory, you can see a script called 'cvss'.
+You can simply quickstart the summarizer by executing it
+
+     $ ./cvss
+
+And that's it, the summarizer would begin operation.
 
 
 # Update on August, 30th 2020
