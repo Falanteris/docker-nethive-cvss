@@ -1,6 +1,6 @@
 {
 	"savefile":["nvdcve-1.1-2019.json","nvdcve-1.1-2018.json","nvdcve-1.1-2017.json","nvdcve-1.1-2020.json"],
-	"target":["https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2018","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2017","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2019","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2020"],
+	"target":["https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2019","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2018","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2017","https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-2020"],
 	"metafile":["nvdcve-1.1-2019.meta","nvdcve-1.1-2018.meta","nvdcve-1.1-2017.meta","nvdcve-1.1-2020.meta"],
 	"dataset_folder":"data_feeds"
 }
