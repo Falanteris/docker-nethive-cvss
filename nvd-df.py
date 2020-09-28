@@ -209,8 +209,8 @@ for change in cvss_dfs:
 
         #		print(get_val);
         #	continue;
-        if type(get_val) == "<class 'pandas.core.series.Series'>":
-            get_val = get_val[0]
+        #if type(get_val) == "<class 'pandas.core.series.Series'>":
+        #    get_val = get_val[0]
         
         if (change[0] == "PR"):
             scope = vectordata.loc[cve_id, "S"]
