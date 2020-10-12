@@ -5,3 +5,4 @@ elasticsearch
 cvss
 colorama
 flask
+gevent

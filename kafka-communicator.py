@@ -16,6 +16,8 @@ from flask import render_template
 from urllib.parse import unquote as urldecode
 from flask import jsonify
 from flask import request
+from gevent.pywsgi import WSGIServer
+#from yourapplication import app
 app = Flask(__name__)
 
 @app.route('/')
@@ -246,4 +248,6 @@ if __name__ == "__main__":
 	else:
 		# runs only as a rest API server
 		print(Fore.GREEN+"[+] Running in API mode..")
-		app.run("0.0.0.0",5000)
+		http_server = WSGIServer(('0.0.0.0', 5000), app)
+		http_server.serve_forever()
+		#app.run("0.0.0.0",5000)
