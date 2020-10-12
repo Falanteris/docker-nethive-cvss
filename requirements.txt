@@ -4,4 +4,4 @@ pandas
 elasticsearch
 cvss
 colorama
-Flask
+flask
