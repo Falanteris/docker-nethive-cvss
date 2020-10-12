@@ -17,6 +17,12 @@
 # CVSS Tag-Based Calculation System
 This application directly extracts data from NVD regularly and can perform integration if the user desires.
 
+## New Feature: Standalone API version
+
+Now you can run this as a fully-fledged API in your server. Installation process remains the same. However, if
+you still want to use the classic pipeline you would need to provide an Environment Variable MODE to PIPELINE
+when running it. Of course, the API will still be up and running too.
+
 
 ## Pre-Requisites
 

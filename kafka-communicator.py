@@ -3,13 +3,57 @@ from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 import json
 #import socket
+from urllib.parse import unquote as urldecode
 import datetime
 import subprocess
 import os
 import time
 import threading
 from colorama import init, Fore, Back, Style
+import threading
+from flask import Flask,url_for
+from flask import render_template
+from urllib.parse import unquote as urldecode
+from flask import jsonify
+from flask import request
+app = Flask(__name__)
 
+@app.route('/')
+def greet():
+    return render_template("greet.html",version="1.0.1")
+
+@app.route('/calculate/<path:info>',methods=["GET","POST"])
+def fetch_cvss_by_url(info):
+	info = info.split("/")
+	vul = info[0]
+	host = info[1]
+	url = "/".join(vul[2:])
+	result = {
+		"error": "Cannot get statistical results"
+	}
+	try:
+		result = call_summarizer({"vul":vul,"ip":host,"url":url})
+	except Exception as e:
+		print(str(e))
+		result["error_detail"] = str(e)
+		pass
+	return jsonify(result)
+# @app.route('/calculate/upload/',methods=["GET","POST","PUT"])
+# def fetch_cvss_by_json_upload(vul=None,host=None,url=None):
+# 	if(request.method == "GET"):
+# 		return render_template("uploadtutorial.html");
+# 	url = urldecode(url)
+# 	result = {
+# 		"error": "Cannot get statistical results"
+# 	}
+# 	try:
+# 		params = json.loads(request.files["cvss_metric"])
+# 		result = call_summarizer({"vul":params["vul"],"ip":params["host"],"url":params["url"]})
+# 	except Exception as e:
+# 		result["error_detail"] = str(e)
+# 		pass
+
+# 	return jsonify(result)
 
 #print("test")
 
@@ -147,16 +191,16 @@ def start_kafka():
 		try:
 			consumer = KafkaConsumer(producer,bootstrap_servers=server_port)
 			kafka_online = True
-			return consumer;
+			return consumer
 		except Exception as e:
 			print(e)
 			print("[!] Kafka seems to be offline, retrying in 5 seconds..");
-			time.sleep(5);
+			time.sleep(5)
 	
-es = None;
-log_not_empty = False;
+es = None
+log_not_empty = False
 def start_elastic():
-	global es;
+	global es
 	global es_online
 	try:
 		es = Elasticsearch(
@@ -185,11 +229,21 @@ if __name__ == "__main__":
 #config = json.loads(open("kafka-config/conf.json").read())
 #template = json.loads(open("event-template.json").read());
 	init()
-	print("[+] connecting to external services..");
-	consumer = start_kafka();
-	start_elastic()
-	print(Fore.GREEN+"[+] kafka consumer enabled..")
-	print(Fore.GREEN+"[+] Begin summarizer");
-	print(Style.RESET_ALL)
-	for msg in consumer:
-		log(msg.value.decode());	
+
+	if os.getenv("MODE") == "PIPELINE":
+		# runs in pipeline mode, which requires kafka and elasticsearch to be present
+		print("[+] Starting Flask API service on port 5000..")
+		flaskThread = threading.Thread(target=app.run,args=["0.0.0.0","5000"]);
+		flaskThread.start();
+		print("[+] connecting to external services..")
+		consumer = start_kafka()
+		start_elastic()
+		print(Fore.GREEN+"[+] kafka consumer enabled..")
+		print(Fore.GREEN+"[+] Begin summarizer")
+		print(Style.RESET_ALL)
+		for msg in consumer:
+			log(msg.value.decode())
+	else:
+		# runs only as a rest API server
+		print(Fore.GREEN+"[+] Running in API mode..")
+		app.run("0.0.0.0",5000)

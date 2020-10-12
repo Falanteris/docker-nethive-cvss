@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <p>To upload a json parameter, you will have to utilize the POST and PUT
+            request, and upload it from there. You can use tools such as 
+            'curl' to allow you to send the json files for the calculation.
+            
+            e.g  curl -X PUT -d params.json [summarizer's address]
+
+        </p>
+        <table>
+            <th>List Of Parameters</th>
+            <th>Description</th>
+            <tr>
+                <td>vul</td>
+                <td>The type of vulnerability in question,
+                    for now you can use SQLi or XSS as a parameter
+                </td>
+            </tr>
+            <tr>
+                <td>host</td>
+                <td>IP or domain of the victim host
+                </td>
+            </tr>
+            <tr>
+                <td>url</td>
+                <td>the attacked endpoint of the host.
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
