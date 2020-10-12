@@ -23,6 +23,8 @@ Now you can run this as a fully-fledged API in your server. Installation process
 you still want to use the classic pipeline you would need to provide an Environment Variable MODE to PIPELINE
 when running it. Of course, the API will still be up and running too.
 
+The API will run on port 5000
+
 
 ## Pre-Requisites
 
