@@ -249,7 +249,7 @@ if __name__ == "__main__":
 		print(Fore.GREEN+"[+] Running in API mode..")
 		env_port = os.getenv("CVSS_PORT")
 		if env_port is not None :
-			CVSS_PORT = env_port 
+			CVSS_PORT = int(env_port)
 		http_server = WSGIServer(('0.0.0.0', CVSS_PORT), app)
 		http_server.serve_forever()
 		#app.run("0.0.0.0",5000)
