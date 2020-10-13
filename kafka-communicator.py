@@ -231,7 +231,6 @@ if __name__ == "__main__":
 #config = json.loads(open("kafka-config/conf.json").read())
 #template = json.loads(open("event-template.json").read());
 	init()
-
 	if os.getenv("MODE") == "PIPELINE":
 		# runs in pipeline mode, which requires kafka and elasticsearch to be present
 		print("[+] Starting Flask API service on port 5000..")
