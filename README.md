@@ -23,8 +23,14 @@ Now you can run this as a fully-fledged API in your server. Installation process
 you still want to use the classic pipeline you would need to provide an Environment Variable MODE to PIPELINE
 when running it. Of course, the API will still be up and running too.
 
-The API will run on port 5000
+The API will run on port 5000 by default. However, you can change that by providing the docker container an extra
+Environment Variable "CVSS_PORT".
 
+So running it would look something like this:
+
+        $ docker run -it --network=host -e CVSS_PORT=3000 nethive.me/cvss
+
+This would run the app on port 3000
 
 ## Pre-Requisites
 

@@ -19,7 +19,7 @@ from flask import request
 from gevent.pywsgi import WSGIServer
 #from yourapplication import app
 app = Flask(__name__)
-
+CVSS_PORT = 5000
 @app.route('/')
 def greet():
     return render_template("greet.html",version="1.0.1")
@@ -137,10 +137,10 @@ def send_cached_data():
 		data = f.read();
 		lists = data.split("\n")
 		[es.index(index=os.getenv("STOREINDEX"),body=json.loads(msg)) for msg in lists];
-		f.close();
-	w_fd = open("kc.log","w");
-	w_fd.write("");
-	w_fd.close();
+		f.close()
+	w_fd = open("kc.log","w")
+	w_fd.write("")
+	w_fd.close()
 
 def log(msg):
 	#global sock
@@ -247,6 +247,9 @@ if __name__ == "__main__":
 	else:
 		# runs only as a rest API server
 		print(Fore.GREEN+"[+] Running in API mode..")
-		http_server = WSGIServer(('0.0.0.0', 5000), app)
+		env_port = os.getenv("CVSS_PORT")
+		if env_port is not None :
+			CVSS_PORT = env_port 
+		http_server = WSGIServer(('0.0.0.0', CVSS_PORT), app)
 		http_server.serve_forever()
 		#app.run("0.0.0.0",5000)
