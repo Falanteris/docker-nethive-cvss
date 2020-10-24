@@ -4,9 +4,40 @@ python3 nvd-df.py
  python3 cronbach_calculator_cvss.py XSS
 python3 CoVCalculator.py XSS_describe.csv
  cd ..
+
 node reader.js data_feeds CWE-89 SQLi
 python3 nvd-df.py
  cd datasets 
  python3 cronbach_calculator_cvss.py SQLi
 python3 CoVCalculator.py SQLi_describe.csv
+ cd ..
+
+node reader.js data_feeds CWE-77 CI
+python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py CI
+python3 CoVCalculator.py CI_describe.csv
+ cd ..
+ 
+node reader.js data_feeds CWE-78 OSCI
+python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py OSCI
+python3 CoVCalculator.py OSCI_describe.csv
+ cd ..
+ 
+
+node reader.js data_feeds CWE-88 ARGI
+python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py ARGI
+python3 CoVCalculator.py ARGI_describe.csv
+ cd ..
+
+
+node reader.js data_feeds CWE-90 LDAP
+python3 nvd-df.py
+ cd datasets 
+ python3 cronbach_calculator_cvss.py LDAP
+python3 CoVCalculator.py LDAP_describe.csv
  cd ..
