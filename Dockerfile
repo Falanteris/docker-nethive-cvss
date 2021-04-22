@@ -1,18 +1,22 @@
-FROM node:lts-alpine
+FROM node:lts
 
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN apk update
+RUN apt-get update
 
-RUN apk upgrade
+RUN apt-get upgrade --assume-yes
 
-ENV PYTHONUNBUFFERED=1
-RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-RUN python3 -m ensurepip
-RUN pip3 install --no-cache --upgrade pip setuptools
-RUN apk add curl
+RUN apt-get install python3-pip --assume-yes
+
+RUN add-apt-repository ppa:deadsnakes/ppa && apt update && apt install python3.9
+
+RUN pip3 install --upgrade pip setuptools
+
+RUN pip3 install -r requirements.txt
+
+RUN apt-get install -y curl
 
 RUN npm install
 
@@ -49,5 +53,3 @@ ENV ESLOC=http://elastic:changeme@localhost:9200
 ENV STOREINDEX=nethive-cvss
 
 ENTRYPOINT ["bash","start-service"]
-
-
