@@ -6,15 +6,15 @@ COPY . /usr/src/app
 
 RUN apk update
 
-RUN apk upgrade --assume-yes
+RUN apk upgrade
 
-RUN apk add python3.9 python3-pip --assume-yes
+RUN apk add python3.9 python3-pip
 
 RUN pip3 install --upgrade pip setuptools
 
 RUN pip3 install -r requirements.txt
 
-RUN apk add -y curl
+RUN apk add curl
 
 RUN npm install
 
