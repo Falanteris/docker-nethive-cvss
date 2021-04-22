@@ -9,9 +9,9 @@ RUN apt-get update
 RUN apt-get upgrade --assume-yes
 
 RUN apt-get install software-properties-common python3-pip -y
-RUN wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz && tar xf Python-3.7.3.tar.xz && cd ./Python-3.7.3 
+RUN wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz && tar xf Python-3.7.3.tar.xz
 
-RUN ./configure && make && make install && update-alternatives --install /usr/bin/python python /usr/local/bin/python3.7 10
+RUN cd ./Python-3.7.3  && ./configure && make && make install && update-alternatives --install /usr/bin/python python /usr/local/bin/python3.7 10
 
 RUN pip3 install --upgrade pip setuptools
 
