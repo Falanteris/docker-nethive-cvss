@@ -1,23 +1,23 @@
-FROM node:lts
+FROM node:lts-alpine
 
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN apt-get update
+RUN apk update
 
-RUN apt-get upgrade --assume-yes
+RUN apk upgrade --assume-yes
 
-RUN apt-get install python3-pip --assume-yes
+RUN apk add python3.9 python3-pip --assume-yes
 
 RUN pip3 install --upgrade pip setuptools
 
 RUN pip3 install -r requirements.txt
 
-RUN apt-get install -y curl
+RUN apk add -y curl
 
 RUN npm install
-
+a
 RUN npm install -g forever
 
 RUN chmod +x start-service
