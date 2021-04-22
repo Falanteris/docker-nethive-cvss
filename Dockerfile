@@ -10,7 +10,9 @@ RUN apt-get upgrade --assume-yes
 
 RUN apt-get install software-properties-common -y
 
-RUN add-apt-repository ppa:deadsnakes/ppa && apt update && apt install python3.9 python3-pip -y
+RUN add-apt-repository ppa:deadsnakes/ppa && apt update && apt install python3.9
+
+RUN python3.9 get-pip.py
 
 RUN pip3 install --upgrade pip setuptools
 
