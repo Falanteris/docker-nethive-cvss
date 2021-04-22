@@ -17,7 +17,7 @@ RUN pip3 install -r requirements.txt
 RUN apk add -y curl
 
 RUN npm install
-a
+
 RUN npm install -g forever
 
 RUN chmod +x start-service
